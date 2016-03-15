@@ -23,26 +23,43 @@
    <insert id="insertBoard" parameterType="hashmap">
        
         <![CDATA[
-          INSERT INTO TB_BOARD
+          INSERT detail_dentist
           (
-            TITLE,
-            CONTENTS,
-            HIT_CNT,
-            DEL_GB,
-            CREA_DTM,
-            CREA_ID
+            ID,
+            PASSWD,
+            NAME,
+            ADDRESS1,
+            ADDRESS2,
+            ADDRESS3,
+            PHONE
           )
           VALUES
           (
-           #{TITLE},
-           #{CONTENTS},
-           0,
-           'N',
-           now(),
-           'Admin'
+           #{ID},
+           #{PASSWD},
+           #{NAME},
+           #{ADDRESS1},
+           #{ADDRESS2},
+           #{ADDRESS3},
+           #{PHONE}
            )
         ]]>
 	</insert>
+   
+    <select id="selectBoardCount" parameterType="hashmap" resultType="int">
+        <![CDATA[  
+            select count(*) from detail_dentist
+        ]]>
+    </select>
+   
+    <select id="selectBoardLikeIDCount" parameterType="hashmap" resultType="int">
+        <![CDATA[  
+            select count(*) from detail_dentist where ID like #{ID}
+        ]]>
+    </select>
+    
+    
+    
    
     <insert id="insertFile" parameterType="hashmap">
         <![CDATA[ 
@@ -116,13 +133,6 @@
              IDX = #{IDX}
         ]]>
     </update>
-    
-    
-     <select id="selectBoardCount" parameterType="hashmap" resultType="int">
-        <![CDATA[  
-            select count(*) from TB_BOARD
-        ]]>
-    </select>
     
      <select id="selectFileList" parameterType="hashmap" resultType="hashmap">
      <![CDATA[ 

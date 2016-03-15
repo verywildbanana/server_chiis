@@ -64,18 +64,22 @@ public class HomeController {
 
 	@RequestMapping(value="/sample/openBoardWrite.do")
 	public ModelAndView openBoardWrite(CommandMap commandMap) throws Exception{
+
+		log.debug("openBoardWrite ");
+
 		ModelAndView mv = new ModelAndView("/sample/boardWrite");
 
 		return mv;
 	}
 
-	 @RequestMapping(value="/sample/insertBoard.do")
-	    public ModelAndView insertBoard(CommandMap commandMap, HttpServletRequest request) throws Exception{
-	        ModelAndView mv = new ModelAndView("redirect:/sample/openBoardList.do");
-	         
-	        sampleService.insertBoard(commandMap.getMap(), request);
-	         
-	        return mv;
-	    }
-	
+	@RequestMapping(value="/sample/insertBoard.do")
+	public ModelAndView insertBoard(CommandMap commandMap, HttpServletRequest request) throws Exception{
+
+		log.debug("insertBoard ");
+
+		sampleService.insertBoard(commandMap.getMap(), request);
+
+		return null;
+	}
+
 }

@@ -7,6 +7,8 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import net.sf.json.JSONObject;
+
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
@@ -67,15 +69,9 @@ public class SampleServiceImpl implements SampleService{
     
     @Override
     public void insertBoard(Map<String, Object> map, HttpServletRequest request) throws Exception {
-        sampleDAO.insertBoard(map);
-        int count = sampleDAO.selectBoardListCount(map);
-         
-        map.put("IDX", "" +count);
         
-//        List<Map<String,Object>> list = fileUtils.parseInsertFileInfo(map, request);
-//        for(int i=0, size=list.size(); i<size; i++){
-//            sampleDAO.insertFile(list.get(i));
-//        }
+    	sampleDAO.insertBoard(map);
+        int count = sampleDAO.selectBoardListCount(map);
     }
     
 
