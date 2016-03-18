@@ -8,6 +8,9 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
@@ -18,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.verywildbanana.chiis.common.CommandMap;
 import com.verywildbanana.chiis.dao.SampleService;
+import com.verywildbanana.chiis.dao.SampleServiceImpl;
 
 
 
@@ -31,7 +35,7 @@ public class HomeController {
 	Logger log = Logger.getLogger(this.getClass());
 
 	@Resource(name="sampleService")
-	private SampleService sampleService;
+	private SampleServiceImpl sampleService;
 
 
 	/**
@@ -82,4 +86,68 @@ public class HomeController {
 		return null;
 	}
 
+	@RequestMapping(value="/api/insertDentist.do", method = RequestMethod.POST)
+	public void insertDentist(CommandMap commandMap, HttpServletRequest request, HttpServletResponse response) throws Exception{
+
+		String id = request.getParameter("ID");
+		String password = request.getParameter("PASSWD");
+		String name = request.getParameter("NAME");
+		String address1 = request.getParameter("ADDRESS1");
+		String address2 = request.getParameter("ADDRESS2");
+		String address3 = request.getParameter("ADDRESS3");
+		String phone = request.getParameter("PHONE");
+
+		log.debug("insertDentist " + id);
+
+		try {
+
+			int count = sampleService.selectBoardLikeIdCount(commandMap.getMap());
+			log.debug("InsertDentist count " + count);
+
+			if(count > 0) {
+
+				JSONObject json = new JSONObject();
+				json = new JSONObject();
+				json.put("error"     ,  "id 이미 존재합니다.");
+				response.setContentType("application/json");
+				response.getWriter().write(json.toString());
+
+				log.debug("InsertDentist doGet 1 ");
+
+				return;
+
+			}
+			log.debug("InsertDentist doGet 2");
+
+			sampleService.insertBoard(commandMap.getMap(), request);
+
+			log.debug("InsertDentist doGet 3");
+
+		} 
+		catch (Exception e) {
+
+			e.printStackTrace();
+			JSONObject json = new JSONObject();
+			json = new JSONObject();
+			json.put("error"     , e.toString());
+			response.setContentType("application/json");
+			response.getWriter().write(json.toString());
+
+			return;
+		}
+
+		JSONObject json = new JSONObject();
+		json = new JSONObject();
+		json.put("ID"     , id);
+		json.put("PASSWD" , password);
+		json.put("NAME"   , name);
+		json.put("ADDRESS1" , address1);
+		json.put("ADDRESS2" , address2);
+		json.put("ADDRESS3" , address3);
+		json.put("PHONE", phone);
+
+		response.setContentType("application/json");
+		response.getWriter().write(json.toString());
+
+	}
 }

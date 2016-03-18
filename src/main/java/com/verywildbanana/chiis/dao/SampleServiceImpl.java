@@ -19,7 +19,7 @@ public class SampleServiceImpl implements SampleService{
      
 //    @Resource(name="fileUtils")
 //    private FileUtils fileUtils;
-     
+    
     @Resource(name="sampleDAO")
     private SampleDAO sampleDAO;
      
@@ -74,5 +74,10 @@ public class SampleServiceImpl implements SampleService{
         int count = sampleDAO.selectBoardListCount(map);
     }
     
+    public int selectBoardLikeIdCount(Map<String, Object> map) throws Exception {
+        
+        int count = sampleDAO.selectBoardLikeIdCount(map);
+        return count;
+    } 
 
 }

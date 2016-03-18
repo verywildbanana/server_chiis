@@ -29,8 +29,8 @@ public class RootConfig {
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
         dataSource.setUrl("jdbc:mysql://localhost/chiis");
         dataSource.setUsername("root");
-        dataSource.setPassword("chiis123");
-        
+//        dataSource.setPassword("chiis123");
+        dataSource.setPassword("password123");
         return dataSource;
     }
  
