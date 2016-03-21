@@ -23,7 +23,7 @@
    <insert id="insertBoard" parameterType="hashmap">
        
         <![CDATA[
-          INSERT detail_dentist
+          INSERT INTO detail_dentist
           (
             ID,
             PASSWD,
@@ -31,7 +31,20 @@
             ADDRESS1,
             ADDRESS2,
             ADDRESS3,
-            PHONE
+            ADDRESS4,
+            LAT,
+            LNG,
+            PHONE,
+            ACTIVE_TIME1,
+            ACTIVE_TIME2,
+            ACTIVE_TIME3,
+            DES,
+            DT_1_NAME,
+            DT_1_DES,
+            DT_2_NAME,
+            DT_2_DES,
+            DT_3_NAME,
+            DT_3_DES
           )
           VALUES
           (
@@ -41,7 +54,20 @@
            #{ADDRESS1},
            #{ADDRESS2},
            #{ADDRESS3},
-           #{PHONE}
+           #{ADDRESS4},
+           #{LAT},
+           #{LNG},
+           #{PHONE},
+           #{ACTIVE_TIME1},
+           #{ACTIVE_TIME2},
+           #{ACTIVE_TIME3},
+           #{DES},
+           #{DT_1_NAME},
+           #{DT_1_DES},
+           #{DT_2_NAME},
+           #{DT_2_DES},
+           #{DT_3_NAME},
+           #{DT_3_DES}
            )
         ]]>
 	</insert>

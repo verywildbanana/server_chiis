@@ -13,10 +13,13 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
+import org.aspectj.apache.bcel.classfile.ConstantString;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.verywildbanana.chiis.common.CommandMap;
@@ -106,9 +109,7 @@ public class HomeController {
 
 			if(count > 0) {
 
-				JSONObject json = new JSONObject();
-				json = new JSONObject();
-				json.put("error"     ,  "id 이미 존재합니다.");
+				JSONObject json =  getErrorJsonData(Constants.API_ERROR_CODE_DENTAL_1, Constants.API_ERROR_CODE_DENTAL_1_TXT);
 				response.setContentType("application/json");
 				response.getWriter().write(json.toString());
 
@@ -127,27 +128,42 @@ public class HomeController {
 		catch (Exception e) {
 
 			e.printStackTrace();
-			JSONObject json = new JSONObject();
-			json = new JSONObject();
-			json.put("error"     , e.toString());
+			
+			JSONObject json =  getErrorJsonData(Constants.API_ERROR_CODE_TOTAL_1, e.toString());
 			response.setContentType("application/json");
 			response.getWriter().write(json.toString());
 
 			return;
 		}
 
-		JSONObject json = new JSONObject();
-		json = new JSONObject();
-		json.put("ID"     , id);
-		json.put("PASSWD" , password);
-		json.put("NAME"   , name);
-		json.put("ADDRESS1" , address1);
-		json.put("ADDRESS2" , address2);
-		json.put("ADDRESS3" , address3);
-		json.put("PHONE", phone);
+//		JSONObject json = new JSONObject();
+//		json = new JSONObject();
+//		json.put("ID"     , id);
+//		json.put("PASSWD" , password);
+//		json.put("NAME"   , name);
+//		json.put("ADDRESS1" , address1);
+//		json.put("ADDRESS2" , address2);
+//		json.put("ADDRESS3" , address3);
+//		json.put("PHONE", phone);
 
+		JSONObject json =  getErrorJsonData("200.0000", "success");
 		response.setContentType("application/json");
 		response.getWriter().write(json.toString());
 
 	}
+	private JSONObject getErrorJsonData(String code, String message) {
+		
+		JSONObject json = new JSONObject();
+		json.put("code"     ,  code);
+		json.put("message"     ,  message);
+		
+		JSONObject inner = new JSONObject();
+		inner.put("required_version"     , Constants.required_version);
+		inner.put("update_url"     ,  Constants.update_url);
+		json.put("update_info"     ,  inner);
+		
+	    return json;
+		
+	}
+	
 }
