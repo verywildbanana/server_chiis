@@ -1,5 +1,6 @@
 package com.verywildbanana.chiis;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
@@ -13,18 +14,19 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
-import org.aspectj.apache.bcel.classfile.ConstantString;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.verywildbanana.chiis.common.CommandMap;
-import com.verywildbanana.chiis.dao.SampleService;
 import com.verywildbanana.chiis.dao.SampleServiceImpl;
+import com.verywildbanana.chiis.file.FileInfo;
+import com.verywildbanana.chiis.file.FileUploadResponse;
+import com.verywildbanana.chiis.file.UploadService;
 
 
 
@@ -40,7 +42,8 @@ public class HomeController {
 	@Resource(name="sampleService")
 	private SampleServiceImpl sampleService;
 
-
+	@Resource(name="uploadService")
+	private UploadService uploadService;
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
@@ -84,7 +87,7 @@ public class HomeController {
 
 		log.debug("insertBoard ");
 
-		sampleService.insertBoard(commandMap.getMap(), request);
+		sampleService.insertBoard(commandMap.getMap());
 
 		return null;
 	}
@@ -100,12 +103,12 @@ public class HomeController {
 		String address3 = request.getParameter("ADDRESS3");
 		String phone = request.getParameter("PHONE");
 
-		log.debug("insertDentist " + id);
+		log.info("insertDentist " + id);
 
 		try {
 
 			int count = sampleService.selectBoardLikeIdCount(commandMap.getMap());
-			log.debug("InsertDentist count " + count);
+			log.info("InsertDentist count " + count);
 
 			if(count > 0) {
 
@@ -118,17 +121,17 @@ public class HomeController {
 				return;
 
 			}
-			log.debug("InsertDentist doGet 2");
+			log.info("InsertDentist doGet 2");
 
-			sampleService.insertBoard(commandMap.getMap(), request);
+			sampleService.insertBoard(commandMap.getMap());
 
-			log.debug("InsertDentist doGet 3");
+			log.info("InsertDentist doGet 3");
 
 		} 
 		catch (Exception e) {
 
 			e.printStackTrace();
-			
+
 			JSONObject json =  getErrorJsonData(Constants.API_ERROR_CODE_TOTAL_1, e.toString());
 			response.setContentType("application/json");
 			response.getWriter().write(json.toString());
@@ -136,34 +139,62 @@ public class HomeController {
 			return;
 		}
 
-//		JSONObject json = new JSONObject();
-//		json = new JSONObject();
-//		json.put("ID"     , id);
-//		json.put("PASSWD" , password);
-//		json.put("NAME"   , name);
-//		json.put("ADDRESS1" , address1);
-//		json.put("ADDRESS2" , address2);
-//		json.put("ADDRESS3" , address3);
-//		json.put("PHONE", phone);
-
 		JSONObject json =  getErrorJsonData("200.0000", "success");
 		response.setContentType("application/json");
 		response.getWriter().write(json.toString());
 
 	}
 	private JSONObject getErrorJsonData(String code, String message) {
-		
+
 		JSONObject json = new JSONObject();
 		json.put("code"     ,  code);
 		json.put("message"     ,  message);
-		
+
 		JSONObject inner = new JSONObject();
 		inner.put("required_version"     , Constants.required_version);
 		inner.put("update_url"     ,  Constants.update_url);
 		json.put("update_info"     ,  inner);
-		
-	    return json;
-		
+
+		return json;
+
 	}
-	
+
+	@RequestMapping(value="/api/files.do", method = RequestMethod.POST, headers = "Content-Type!=multipart/form-data")
+	public ResponseEntity<FileUploadResponse> uploadFileBody(
+			final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+
+		FileInfo fileInfo = null;
+
+		try {
+		
+			fileInfo = uploadService.saveFile(request.getInputStream());
+		
+		} catch (IOException e) {
+
+			JSONObject json =  getErrorJsonData(Constants.API_ERROR_CODE_TOTAL_1, e.toString());
+			response.setContentType("application/json");
+			response.getWriter().write(json.toString());
+			
+		}
+
+		String imgPosition = request.getHeader("img_position");
+		String id = request.getHeader("insert_id");
+		
+		log.info("uploadFileBody insert_id  " + id);
+		log.info("uploadFileBody img_position  " + imgPosition);
+		
+		int position = Integer.parseInt(imgPosition);
+		
+		CommandMap commonMap = new CommandMap();
+		commonMap.put("IMG", "" + fileInfo.getDownloadUrl());
+		commonMap.put("ID", id);
+		sampleService.updateImg(position, commonMap.getMap());
+		
+		FileUploadResponse fres  = new FileUploadResponse("200.0000", "success");
+		fres.setLocation(fileInfo.getDownloadUrl());
+		
+		return new ResponseEntity<FileUploadResponse>(
+				fres, HttpStatus.CREATED);
+	}
+
 }

@@ -11,46 +11,85 @@ import org.springframework.stereotype.Repository;
 public class SampleDAO extends AbstractDAO{
 
 	@SuppressWarnings("unchecked")
-    public List<Map<String, Object>> selectBoardList(Map<String, Object> map) throws Exception{
-        return (List<Map<String, Object>>)selectList("sample.selectBoardList", map);
-    }
- 
+	public List<Map<String, Object>> selectBoardList(Map<String, Object> map) throws Exception{
+		return (List<Map<String, Object>>)selectList("sample.selectBoardList", map);
+	}
+
 	public int selectBoardListCount(Map<String, Object> map) throws Exception{
-        return (Integer)selectOne("sample.selectBoardCount", map);
-    }
-	
+		return (Integer)selectOne("sample.selectBoardCount", map);
+	}
+
 	public void insertBoard(Map<String, Object> map) throws Exception{
-	    insert("sample.insertBoard", map);
+		insert("sample.insertBoard", map);
 	}
-	
+
 	public void updateHitCnt(Map<String, Object> map) throws Exception{
-	    update("sample.updateHitCnt", map);
+		update("sample.updateHitCnt", map);
 	}
-	 
+
 	@SuppressWarnings("unchecked")
 	public Map<String, Object> selectBoardDetail(Map<String, Object> map) throws Exception{
-	    return (Map<String, Object>) selectOne("sample.selectBoardDetail", map);
+		return (Map<String, Object>) selectOne("sample.selectBoardDetail", map);
 	}
-	
+
 	public void updateBoard(Map<String, Object> map) throws Exception{
-	    update("sample.updateBoard", map);
+		update("sample.updateBoard", map);
 	}
-	
+
 	public void deleteBoard(Map<String, Object> map) throws Exception{
-	    update("sample.deleteBoard", map);
+		update("sample.deleteBoard", map);
 	}
-	
+
 	public void insertFile(Map<String, Object> map) throws Exception{
-	    insert("sample.insertFile", map);
+		insert("sample.insertFile", map);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> selectFileList(Map<String, Object> map) throws Exception{
-	    return (List<Map<String, Object>>)selectList("sample.selectFileList", map);
+		return (List<Map<String, Object>>)selectList("sample.selectFileList", map);
 	}
-	
+
 	public int selectBoardLikeIdCount(Map<String, Object> map) throws Exception{
-        return (Integer)selectOne("sample.selectBoardLikeIDCount", map);
-    }
-	
+		return (Integer)selectOne("sample.selectBoardLikeIDCount", map);
+	}
+
+	public void updateImg(int position, Map<String, Object> map) throws Exception{
+
+		if(position == 1) {
+
+			update("sample.updateImg1", map);
+			
+		}
+		else if(position == 2) {
+
+			update("sample.updateImg2", map);
+		}
+		else if(position == 3) {
+
+			update("sample.updateImg3", map);
+		}
+		else if(position == 4) {
+
+			update("sample.updateImg4", map);
+		}
+		else if(position == 5) {
+
+			update("sample.updateImg5", map);
+		}
+		else if(position == 6) {
+
+			update("sample.updateImg6", map);
+		}
+		else if(position == 7) {
+
+			update("sample.updateImg7", map);
+			
+		}
+		else if(position == 8) {
+
+			update("sample.updateImg8", map);
+		}
+
+	}
+
 }

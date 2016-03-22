@@ -2,6 +2,9 @@ package com.verywildbanana.chiis;
 
 public class Constants {
 
+	
+	public static final boolean RELEASE_BUILD = false;
+	
 	public final static String API_SUCCESS_CODE = "200.0000";
 	public final static String API_ERROR_CODE_REQ_UPDTE_APP = "400.1111"; // 강제 업데이트 
 	
@@ -12,5 +15,23 @@ public class Constants {
 	
 	public final static String required_version  = "1.0.0";
 	public final static String update_url  = "https://play.google.com/store/apps/details?id=";
+	
+	
+	public static String getFilePath() {
+		
+		if(RELEASE_BUILD) {
+		
+			return "//usr//local//server//tomcat//webapps//banana//img//";
+			
+		}
+		else {
+			
+			return "//Users//HDlee//Downloads//java_server//img//";
+			
+		}
+		
+	}
+	
+	public static final String downloadBaseUrl = "http://221.143.21.149:8080/banana/img/";
 	
 }

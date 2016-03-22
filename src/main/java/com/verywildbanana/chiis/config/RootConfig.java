@@ -1,7 +1,5 @@
 package com.verywildbanana.chiis.config;
 
-import java.io.IOException;
-
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.log4j.Logger;
@@ -11,6 +9,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+
+import com.verywildbanana.chiis.Constants;
 
 @Configuration
 public class RootConfig {
@@ -29,8 +29,17 @@ public class RootConfig {
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
         dataSource.setUrl("jdbc:mysql://localhost/chiis");
         dataSource.setUsername("root");
-//        dataSource.setPassword("chiis123");
-        dataSource.setPassword("password123");
+        
+        if(Constants.RELEASE_BUILD) {
+        	
+        	dataSource.setPassword("chiis123");
+        }
+        else {
+        	
+        	dataSource.setPassword("password123");
+        	
+        }
+        
         return dataSource;
     }
  

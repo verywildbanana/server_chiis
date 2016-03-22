@@ -85,6 +85,102 @@
     </select>
     
     
+    <update id="updateImg1" parameterType="hashmap">
+        
+        <![CDATA[
+          UPDATE detail_dentist
+          SET
+            IMG_1 = #{IMG}
+          WHERE
+            ID = #{ID} 
+        ]]>
+        
+   </update>
+    
+    <update id="updateImg2" parameterType="hashmap">
+        
+        <![CDATA[
+          UPDATE detail_dentist
+          SET
+            IMG_2 = #{IMG}
+          WHERE
+            ID = #{ID} 
+        ]]>
+        
+   </update>
+   
+    <update id="updateImg3" parameterType="hashmap">
+        
+        <![CDATA[
+          UPDATE detail_dentist
+          SET
+            IMG_3 = #{IMG}
+          WHERE
+            ID = #{ID} 
+        ]]>
+        
+   </update>
+   
+    <update id="updateImg4" parameterType="hashmap">
+        
+        <![CDATA[
+          UPDATE detail_dentist
+          SET
+            IMG_4 = #{IMG}
+          WHERE
+            ID = #{ID} 
+        ]]>
+        
+   </update>
+   
+    <update id="updateImg5" parameterType="hashmap">
+        
+        <![CDATA[
+          UPDATE detail_dentist
+          SET
+            IMG_5 = #{IMG}
+          WHERE
+            ID = #{ID} 
+        ]]>
+        
+   </update>
+   
+    <update id="updateImg6" parameterType="hashmap">
+        
+        <![CDATA[
+          UPDATE detail_dentist
+          SET
+            DT_1_IMG = #{IMG}
+          WHERE
+            ID = #{ID} 
+        ]]>
+        
+   </update>
+   
+    <update id="updateImg7" parameterType="hashmap">
+        
+        <![CDATA[
+          UPDATE detail_dentist
+          SET
+            DT_2_IMG = #{IMG}
+          WHERE
+            ID = #{ID} 
+        ]]>
+        
+   </update>
+   
+    
+    <update id="updateImg8" parameterType="hashmap">
+        
+        <![CDATA[
+          UPDATE detail_dentist
+          SET
+            DT_3_IMG = #{IMG}
+          WHERE
+            ID = #{ID} 
+        ]]>
+        
+   </update>
     
    
     <insert id="insertFile" parameterType="hashmap">
