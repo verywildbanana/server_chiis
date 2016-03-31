@@ -24,9 +24,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.verywildbanana.chiis.common.CommandMap;
 import com.verywildbanana.chiis.dao.SampleServiceImpl;
+import com.verywildbanana.chiis.data.ApiStatusInfo;
+import com.verywildbanana.chiis.data.DetailDentistParserData;
 import com.verywildbanana.chiis.file.FileInfo;
 import com.verywildbanana.chiis.file.FileUploadResponse;
 import com.verywildbanana.chiis.file.UploadService;
+import com.verywildbanana.chiis.util.DateUtil;
 
 
 
@@ -93,8 +96,10 @@ public class HomeController {
 	}
 
 	@RequestMapping(value="/api/insertDentist.do", method = RequestMethod.POST)
-	public void insertDentist(CommandMap commandMap, HttpServletRequest request, HttpServletResponse response) throws Exception{
+	public ResponseEntity<ApiStatusInfo> insertDentist(CommandMap commandMap, HttpServletRequest request, HttpServletResponse response) throws Exception{
 
+		ApiStatusInfo info = new ApiStatusInfo();
+		
 		String id = request.getParameter("ID");
 		String password = request.getParameter("PASSWD");
 		String name = request.getParameter("NAME");
@@ -112,13 +117,12 @@ public class HomeController {
 
 			if(count > 0) {
 
-				JSONObject json =  getErrorJsonData(Constants.API_ERROR_CODE_DENTAL_1, Constants.API_ERROR_CODE_DENTAL_1_TXT);
-				response.setContentType("application/json");
-				response.getWriter().write(json.toString());
-
 				log.debug("InsertDentist doGet 1 ");
 
-				return;
+				info.code = Constants.API_ERROR_CODE_DENTAL_1;
+				info.message =  Constants.API_ERROR_CODE_DENTAL_1_TXT;
+				return new ResponseEntity<ApiStatusInfo>(
+						info, HttpStatus.CREATED);
 
 			}
 			log.info("InsertDentist doGet 2");
@@ -132,69 +136,134 @@ public class HomeController {
 
 			e.printStackTrace();
 
-			JSONObject json =  getErrorJsonData(Constants.API_ERROR_CODE_TOTAL_1, e.toString());
-			response.setContentType("application/json");
-			response.getWriter().write(json.toString());
-
-			return;
+			info.code = Constants.API_ERROR_CODE_TOTAL_1;
+			info.message =  e.toString();
+			return new ResponseEntity<ApiStatusInfo>(
+					info, HttpStatus.CREATED);
+			
 		}
 
-		JSONObject json =  getErrorJsonData("200.0000", "success");
-		response.setContentType("application/json");
-		response.getWriter().write(json.toString());
 
-	}
-	private JSONObject getErrorJsonData(String code, String message) {
-
-		JSONObject json = new JSONObject();
-		json.put("code"     ,  code);
-		json.put("message"     ,  message);
-
-		JSONObject inner = new JSONObject();
-		inner.put("required_version"     , Constants.required_version);
-		inner.put("update_url"     ,  Constants.update_url);
-		json.put("update_info"     ,  inner);
-
-		return json;
-
+		info.code = "200.0000";
+		info.message =   "success";
+		return new ResponseEntity<ApiStatusInfo>(
+				info, HttpStatus.CREATED);
+		
 	}
 
 	@RequestMapping(value="/api/files.do", method = RequestMethod.POST, headers = "Content-Type!=multipart/form-data")
 	public ResponseEntity<FileUploadResponse> uploadFileBody(
 			final HttpServletRequest request, final HttpServletResponse response) throws Exception {
 
+		FileUploadResponse fres  = new FileUploadResponse();
+		
 		FileInfo fileInfo = null;
 
 		try {
-		
+
 			fileInfo = uploadService.saveFile(request.getInputStream());
-		
+
 		} catch (IOException e) {
 
-			JSONObject json =  getErrorJsonData(Constants.API_ERROR_CODE_TOTAL_1, e.toString());
-			response.setContentType("application/json");
-			response.getWriter().write(json.toString());
 			
+			fres.code =  Constants.API_ERROR_CODE_TOTAL_1;
+			fres.message =  e.toString();
+			return new ResponseEntity<FileUploadResponse>(
+					fres, HttpStatus.CREATED);
 		}
 
 		String imgPosition = request.getHeader("img_position");
 		String id = request.getHeader("insert_id");
-		
+
 		log.info("uploadFileBody insert_id  " + id);
 		log.info("uploadFileBody img_position  " + imgPosition);
-		
+
 		int position = Integer.parseInt(imgPosition);
-		
+
 		CommandMap commonMap = new CommandMap();
 		commonMap.put("IMG", "" + fileInfo.getDownloadUrl());
 		commonMap.put("ID", id);
 		sampleService.updateImg(position, commonMap.getMap());
+
 		
-		FileUploadResponse fres  = new FileUploadResponse("200.0000", "success");
+		fres.code =  "200.0000";
+		fres.message =  "success";
 		fres.setLocation(fileInfo.getDownloadUrl());
-		
+
 		return new ResponseEntity<FileUploadResponse>(
 				fres, HttpStatus.CREATED);
 	}
 
+	@RequestMapping(value="/api/getDentistInfo.do", method = RequestMethod.GET)
+	public ResponseEntity<DetailDentistParserData> getDentistInfo(CommandMap commandMap, final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+
+		log.info("getDentistInfo start ");
+
+		DetailDentistParserData  parserData = new DetailDentistParserData(); 
+		
+		Map<String, Object>  mapData = null;
+
+		try {
+
+			mapData = sampleService.selectIdDentist(commandMap.getMap());
+
+			log.info("getDentistInfo id  " + commandMap.get("ID"));
+
+			if(mapData == null || mapData.isEmpty()) {
+
+				parserData.code =  Constants.API_ERROR_CODE_DENTAL_2;
+				parserData.message =  Constants.API_ERROR_CODE_DENTAL_2_TXT;
+				
+				return new ResponseEntity<DetailDentistParserData>(parserData, HttpStatus.OK);
+
+			}
+
+		} 
+		catch (Exception e) {
+
+			e.printStackTrace();
+
+			parserData.code =  Constants.API_ERROR_CODE_TOTAL_1;
+			parserData.message =   e.toString();
+			
+			return new ResponseEntity<DetailDentistParserData>(parserData, HttpStatus.OK);
+		}
+
+
+		parserData.code =  "200.0000";
+		parserData.message =  "success";
+		parserData.dentist.NO = (Integer) mapData.get("NO");
+		parserData.dentist.ID = (String) mapData.get("ID");
+		parserData.dentist.PASSWD = (String) mapData.get("PASSWD");
+		parserData.dentist.NAME = (String) mapData.get("NAME");
+		parserData.dentist.ADDRESS1 = (String) mapData.get("ADDRESS1");
+		parserData.dentist.ADDRESS2 = (String) mapData.get("ADDRESS2");
+		parserData.dentist.ADDRESS3 = (String) mapData.get("ADDRESS3");
+		parserData.dentist.ADDRESS4 = (String) mapData.get("ADDRESS4");
+		parserData.dentist.ADDRESS5 = (String) mapData.get("ADDRESS5");
+		parserData.dentist.LAT = (String) mapData.get("LAT");
+		parserData.dentist.LNG = (String) mapData.get("LNG");
+		parserData.dentist.ACTIVE_TIME1 = (String) mapData.get("ACTIVE_TIME1");
+		parserData.dentist.ACTIVE_TIME2 = (String) mapData.get("ACTIVE_TIME2");
+		parserData.dentist.ACTIVE_TIME3 = (String) mapData.get("ACTIVE_TIME3");
+		parserData.dentist.DES = (String) mapData.get("DES");
+		parserData.dentist.IMG_1 = (String) mapData.get("IMG_1");
+		parserData.dentist.IMG_2 = (String) mapData.get("IMG_2");
+		parserData.dentist.IMG_3 = (String) mapData.get("IMG_3");
+		parserData.dentist.IMG_4 = (String) mapData.get("IMG_4");
+		parserData.dentist.DT_1_NAME = (String) mapData.get("DT_1_NAME");
+		parserData.dentist.DT_1_DES = (String) mapData.get("DT_1_DES");
+		parserData.dentist.DT_1_IMG = (String) mapData.get("DT_1_IMG");
+		parserData.dentist.DT_2_NAME = (String) mapData.get("DT_2_NAME");
+		parserData.dentist.DT_2_DES = (String) mapData.get("DT_2_DES");
+		parserData.dentist.DT_2_IMG = (String) mapData.get("DT_2_IMG");
+		parserData.dentist.DT_3_NAME = (String) mapData.get("DT_3_NAME");
+		parserData.dentist.DT_3_DES = (String) mapData.get("DT_3_DES");
+		parserData.dentist.DT_3_IMG = (String) mapData.get("DT_3_IMG");
+		Date date = (Date) mapData.get("REG_TIME");
+		parserData.dentist.REG_TIME =  DateUtil.getDateFormat(date, DateUtil.DATE_FORMAT_6);
+
+		return new ResponseEntity<DetailDentistParserData>(parserData, HttpStatus.OK);
+		
+	}
 }

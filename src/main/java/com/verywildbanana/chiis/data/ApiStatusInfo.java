@@ -1,18 +1,11 @@
 package com.verywildbanana.chiis.data;
 
-import net.sf.json.JSONObject;
 
 public class ApiStatusInfo {
 
-	private String code;
-	private String message;
+	public String code;
+	public String message;
 	
-	UpdateInfo upateaInfo = new UpdateInfo();
-
-	public ApiStatusInfo(String c, String m) {
-
-		this.code = c;
-		this.message = m; 
-	}
+	public UpdateInfo update_info = new UpdateInfo();
 
 }

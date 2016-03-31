@@ -71,7 +71,6 @@ public class SampleServiceImpl implements SampleService{
 	public void insertBoard(Map<String, Object> map) throws Exception {
 
 		sampleDAO.insertBoard(map);
-		int count = sampleDAO.selectBoardListCount(map);
 	}
 
 	public int selectBoardLikeIdCount(Map<String, Object> map) throws Exception {
@@ -86,4 +85,10 @@ public class SampleServiceImpl implements SampleService{
 		
 	} 
 
+	
+	public Map<String, Object> selectIdDentist(Map<String, Object> map) throws Exception {
+		return sampleDAO.selectIdDentist(map);
+
+	}
+	
 }

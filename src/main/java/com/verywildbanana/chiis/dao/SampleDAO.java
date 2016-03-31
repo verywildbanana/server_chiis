@@ -92,4 +92,10 @@ public class SampleDAO extends AbstractDAO{
 
 	}
 
+	@SuppressWarnings("unchecked")
+	public Map<String, Object> selectIdDentist(Map<String, Object> map) throws Exception{
+		return (Map<String, Object>)selectOne("sample.selectIdDentist", map);
+	}
+
+	
 }

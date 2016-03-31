@@ -10,7 +10,9 @@ public class Constants {
 	
 	public final static String API_ERROR_CODE_TOTAL_1 = "401.0000"; // try catch error
 	public final static String API_ERROR_CODE_DENTAL_1 = "401.0001"; // 이미 존재하는 아이디
+	public final static String API_ERROR_CODE_DENTAL_2 = "404.0001"; // 치과 데이터 없음 
 	public final static String API_ERROR_CODE_DENTAL_1_TXT = "이미 존재하는 아이디 입니다.";
+	public final static String API_ERROR_CODE_DENTAL_2_TXT = "등록된 치과 정보 없습니다.";
 	 
 	
 	public final static String required_version  = "1.0.0";

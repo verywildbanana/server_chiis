@@ -6,7 +6,7 @@ import com.verywildbanana.chiis.Constants;
 
 public class UpdateInfo {
 
-	private String required_version = Constants.required_version;
-	private String update_url = Constants.update_url;
+	public String required_version = Constants.required_version;
+	public String update_url = Constants.update_url;
 
 }
