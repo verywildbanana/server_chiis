@@ -107,7 +107,7 @@ public class HomeController {
 		String address2 = request.getParameter("ADDRESS2");
 		String address3 = request.getParameter("ADDRESS3");
 		String phone = request.getParameter("PHONE");
-
+		
 		log.info("insertDentist " + id);
 
 		try {

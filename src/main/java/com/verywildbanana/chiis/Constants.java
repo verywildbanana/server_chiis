@@ -3,7 +3,7 @@ package com.verywildbanana.chiis;
 public class Constants {
 
 	
-	public static final boolean RELEASE_BUILD = false;
+	public static final boolean RELEASE_BUILD = true;
 	
 	public final static String API_SUCCESS_CODE = "200.0000";
 	public final static String API_ERROR_CODE_REQ_UPDTE_APP = "400.1111"; // 강제 업데이트 
