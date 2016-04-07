@@ -198,6 +198,125 @@
     
     
     
+    
+    <insert id="insertUser" parameterType="hashmap">
+       
+        <![CDATA[
+          INSERT INTO detail_user
+          (
+            ID,
+            PASSWD,
+            NAME,
+            ADDRESS1,
+            ADDRESS2,
+            ADDRESS3,
+            ADDRESS4,
+            ADDRESS5,
+            PHONE,
+            EMAIL,
+            DES,
+            FB_ID,
+            KAKAO_ID,
+            LOGIN_TYPE,
+            FB_TOKEN,
+            KAKAO_TOKEN,
+            AGE
+          )
+          VALUES
+          (
+           #{ID},
+           #{PASSWD},
+           #{NAME},
+           #{ADDRESS1},
+           #{ADDRESS2},
+           #{ADDRESS3},
+           #{ADDRESS4},
+           #{ADDRESS5},
+           #{PHONE},
+           #{EMAIL},
+           #{DES},
+           #{FB_ID},
+           #{KAKAO_ID},
+           #{LOGIN_TYPE},
+           #{FB_TOKEN},
+           #{KAKAO_TOKEN},
+           #{AGE}
+           )
+        ]]>
+	</insert>
+    
+    
+    <select id="selectIdUser" parameterType="hashmap" resultType="hashmap">
+        <![CDATA[
+            SELECT
+            	*
+            FROM
+                detail_user
+           
+            WHERE
+            ID = #{ID} 
+        ]]>
+	</select>
+    
+    
+    <select id="selectFBIdUser" parameterType="hashmap" resultType="hashmap">
+        <![CDATA[
+            SELECT
+            	*
+            FROM
+                detail_user
+           
+            WHERE
+            FB_ID = #{FB_ID} 
+        ]]>
+	</select>
+    
+    
+    <select id="selectKAKAOIdUser" parameterType="hashmap" resultType="hashmap">
+        <![CDATA[
+            SELECT
+            	*
+            FROM
+                detail_user
+           
+            WHERE
+            KAKAO_ID = #{KAKAO_ID} 
+        ]]>
+	</select>
+    
+     <select id="selectUserLikIDCount" parameterType="hashmap" resultType="int">
+        <![CDATA[  
+            select count(*) from detail_user where ID like #{ID}
+        ]]>
+    </select>
+    
+    
+     <select id="selectLikFBIDCount" parameterType="hashmap" resultType="int">
+        <![CDATA[  
+            select count(*) from detail_user where FB_ID like #{ID}
+        ]]>
+    </select>
+    
+    
+     <select id="selectLikKAKAOIDCount" parameterType="hashmap" resultType="int">
+        <![CDATA[  
+            select count(*) from detail_user where KAKAO_ID like #{ID}
+        ]]>
+    </select>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
    
     <insert id="insertFile" parameterType="hashmap">
         <![CDATA[ 

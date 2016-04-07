@@ -90,5 +90,46 @@ public class SampleServiceImpl implements SampleService{
 		return sampleDAO.selectIdDentist(map);
 
 	}
+
+/*	
+*  user	
+*/	
 	
+	public void insertUser(Map<String, Object> map) throws Exception {
+
+		sampleDAO.insertUser(map);
+	}
+	
+	public Map<String, Object> selectIdUser(Map<String, Object> map) throws Exception {
+		return sampleDAO.selectIdUser(map);
+
+	}
+	
+	public Map<String, Object> selectFBIdUser(Map<String, Object> map) throws Exception {
+		return sampleDAO.selectFBIdUser(map);
+
+	}
+	
+	public Map<String, Object> selectKAKAOIdUser(Map<String, Object> map) throws Exception {
+		return sampleDAO.selectKAKAOIdUser(map);
+
+	}
+	
+	public int selectUserLikeIdCount(Map<String, Object> map) throws Exception {
+
+		int count = sampleDAO.selectUserLikeIdCount(map);
+		return count;
+	} 
+	
+	public int selectLikeFBIdCount(Map<String, Object> map) throws Exception {
+
+		int count = sampleDAO.selectLikeFBIdCount(map);
+		return count;
+	} 
+	
+	public int selectLikeKAKAOIdCount(Map<String, Object> map) throws Exception {
+
+		int count = sampleDAO.selectLikeKAKAOIdCount(map);
+		return count;
+	} 
 }

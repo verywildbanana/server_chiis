@@ -96,6 +96,35 @@ public class SampleDAO extends AbstractDAO{
 	public Map<String, Object> selectIdDentist(Map<String, Object> map) throws Exception{
 		return (Map<String, Object>)selectOne("sample.selectIdDentist", map);
 	}
-
+	
+	public int selectLikeFBIdCount(Map<String, Object> map) throws Exception{
+		return (Integer)selectOne("sample.selectLikFBIDCount", map);
+	}
+	
+	
+	public int selectLikeKAKAOIdCount(Map<String, Object> map) throws Exception{
+		return (Integer)selectOne("sample.selectLikKAKAOIDCount", map);
+	}
+	
+	public int selectUserLikeIdCount(Map<String, Object> map) throws Exception{
+		return (Integer)selectOne("sample.selectUserLikIDCount", map);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Map<String, Object> selectIdUser(Map<String, Object> map) throws Exception{
+		return (Map<String, Object>)selectOne("sample.selectIdUser", map);
+	}
+	
+	public Map<String, Object> selectFBIdUser(Map<String, Object> map) throws Exception{
+		return (Map<String, Object>)selectOne("sample.selectFBIdUser", map);
+	}
+	
+	public Map<String, Object> selectKAKAOIdUser(Map<String, Object> map) throws Exception{
+		return (Map<String, Object>)selectOne("sample.selectKAKAOIdUser", map);
+	}
+	
+	public void insertUser(Map<String, Object> map) throws Exception{
+		insert("sample.insertUser", map);
+	}
 	
 }

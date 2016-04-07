@@ -1,6 +1,7 @@
 package com.verywildbanana.chiis;
 
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
@@ -26,6 +27,7 @@ import com.verywildbanana.chiis.common.CommandMap;
 import com.verywildbanana.chiis.dao.SampleServiceImpl;
 import com.verywildbanana.chiis.data.ApiStatusInfo;
 import com.verywildbanana.chiis.data.DetailDentistParserData;
+import com.verywildbanana.chiis.data.LoginParserData;
 import com.verywildbanana.chiis.file.FileInfo;
 import com.verywildbanana.chiis.file.FileUploadResponse;
 import com.verywildbanana.chiis.file.UploadService;
@@ -266,4 +268,147 @@ public class HomeController {
 		return new ResponseEntity<DetailDentistParserData>(parserData, HttpStatus.OK);
 		
 	}
+	
+	
+	@RequestMapping(value="/api/insertFBUser.do", method = RequestMethod.POST)
+	public ResponseEntity<LoginParserData> insertFBUser(CommandMap commandMap, HttpServletRequest request, HttpServletResponse response) throws Exception{
+
+		String FB_ID = request.getParameter("FB_ID");
+		
+		log.info("insertFBUser  FB_ID " + FB_ID);
+
+		LoginParserData parserData  = new LoginParserData();
+		
+		String uuid = null;
+		
+		try {
+
+			Map<String, Object> mapData = sampleService.selectFBIdUser(commandMap.getMap());
+
+			if(mapData == null || mapData.isEmpty()) {
+
+				
+				log.info("insertFBUser mapData empty ");
+				
+		        SecureRandom rnd = new SecureRandom();
+		        StringBuffer buf = new StringBuffer();
+
+		        buf.append(FB_ID).append("_");
+		        
+		        for (int i = 0; i < 10; i++) {
+		            if (rnd.nextBoolean()) {
+		                buf.append((char) ((int) (rnd.nextInt(26)) + 97));
+		            } else {
+		                buf.append((rnd.nextInt(10)));
+		            }
+		        }
+		        
+		        uuid = buf.toString();
+				
+				commandMap.put("ID", uuid);
+				
+				sampleService.insertUser(commandMap.getMap());
+				
+			}
+			else {
+				
+				log.info("insertFBUser mapData not empty");
+				uuid = (String) mapData.get("ID");
+				
+			}
+			
+		} 
+		catch (Exception e) {
+
+			e.printStackTrace();
+
+			
+			parserData.code =  Constants.API_ERROR_CODE_TOTAL_1;
+			parserData.message =   e.toString();
+			
+			return new ResponseEntity<LoginParserData>(parserData, HttpStatus.OK);
+			
+		}
+
+		
+		log.info("insertFBUser login.ID " + uuid);
+		
+		parserData.code =  "200.0000";
+		parserData.message =  "success";
+		parserData.login.ID = uuid;
+		
+		return new ResponseEntity<LoginParserData>(parserData, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/api/insertKAKAOUser.do", method = RequestMethod.POST)
+	public ResponseEntity<LoginParserData> insertKAKAOUser(CommandMap commandMap, HttpServletRequest request, HttpServletResponse response) throws Exception{
+
+		String KAKAO_ID = request.getParameter("KAKAO_ID");
+		
+		log.info("insertKAKAOUser  KAKAO_ID " + KAKAO_ID);
+
+		LoginParserData parserData  = new LoginParserData();
+		
+		String  uuid = null;
+		
+		try {
+
+			Map<String, Object> mapData = sampleService.selectKAKAOIdUser(commandMap.getMap());
+
+			if(mapData == null || mapData.isEmpty()) {
+
+				
+				log.info("insertKAKAOUser mapData empty ");
+				
+		        SecureRandom rnd = new SecureRandom();
+		        StringBuffer buf = new StringBuffer();
+
+		        buf.append(KAKAO_ID).append("_");
+		        
+		        for (int i = 0; i < 10; i++) {
+		            if (rnd.nextBoolean()) {
+		                buf.append((char) ((int) (rnd.nextInt(26)) + 97));
+		            } else {
+		                buf.append((rnd.nextInt(10)));
+		            }
+		        }
+		        
+		        uuid = buf.toString();
+				
+				commandMap.put("ID", uuid);
+				
+				sampleService.insertUser(commandMap.getMap());
+				
+			}
+			else {
+				
+				log.info("insertKAKAOUser mapData not empty");
+				uuid = (String) mapData.get("ID");
+				
+			}
+			
+		} 
+		catch (Exception e) {
+
+			e.printStackTrace();
+
+			
+			parserData.code =  Constants.API_ERROR_CODE_TOTAL_1;
+			parserData.message =   e.toString();
+			
+			return new ResponseEntity<LoginParserData>(parserData, HttpStatus.OK);
+			
+		}
+
+		
+		log.info("insertKAKAOUser login.ID " + uuid);
+		
+		parserData.code =  "200.0000";
+		parserData.message =  "success";
+		parserData.login.ID = uuid;
+		
+		return new ResponseEntity<LoginParserData>(parserData, HttpStatus.OK);
+	}
+	
+	
 }
