@@ -215,11 +215,16 @@
             PHONE,
             EMAIL,
             DES,
+            IMG_1,
+            IMG_2,
+            IMG_3,
+            IMG_4,
             FB_ID,
             KAKAO_ID,
             LOGIN_TYPE,
             FB_TOKEN,
             KAKAO_TOKEN,
+            GENDER,
             AGE
           )
           VALUES
@@ -235,11 +240,16 @@
            #{PHONE},
            #{EMAIL},
            #{DES},
+           #{IMG_1},
+           #{IMG_2},
+           #{IMG_3},
+           #{IMG_4},
            #{FB_ID},
            #{KAKAO_ID},
            #{LOGIN_TYPE},
            #{FB_TOKEN},
            #{KAKAO_TOKEN},
+           #{GENDER},
            #{AGE}
            )
         ]]>

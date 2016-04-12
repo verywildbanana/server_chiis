@@ -22,6 +22,10 @@ public class UserData {
 
 	public String ADDRESS5;
 
+	public String PHONE;
+	
+	public String EMAIL;
+	
 	public String DES;
 
 	public String IMG_1;
@@ -41,5 +45,13 @@ public class UserData {
 	public String KAKAO_ID;
 	
 	public String LOGIN_TYPE;
+	
+	public String FB_TOKEN;
+	
+	public String KAKAO_TOKEN;
+	
+	public String GENDER;
+	
+	public int AGE;
 
 }

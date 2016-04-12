@@ -27,6 +27,7 @@ import com.verywildbanana.chiis.common.CommandMap;
 import com.verywildbanana.chiis.dao.SampleServiceImpl;
 import com.verywildbanana.chiis.data.ApiStatusInfo;
 import com.verywildbanana.chiis.data.DetailDentistParserData;
+import com.verywildbanana.chiis.data.DetailUserParserData;
 import com.verywildbanana.chiis.data.LoginParserData;
 import com.verywildbanana.chiis.file.FileInfo;
 import com.verywildbanana.chiis.file.FileUploadResponse;
@@ -278,17 +279,18 @@ public class HomeController {
 		log.info("insertFBUser  FB_ID " + FB_ID);
 
 		LoginParserData parserData  = new LoginParserData();
-		
+		Map<String, Object>  mapData = null;
 		String uuid = null;
 		
 		try {
 
-			Map<String, Object> mapData = sampleService.selectFBIdUser(commandMap.getMap());
+			mapData = sampleService.selectFBIdUser(commandMap.getMap());
 
 			if(mapData == null || mapData.isEmpty()) {
 
 				
 				log.info("insertFBUser mapData empty ");
+				
 				
 		        SecureRandom rnd = new SecureRandom();
 		        StringBuffer buf = new StringBuffer();
@@ -314,7 +316,6 @@ public class HomeController {
 				
 				log.info("insertFBUser mapData not empty");
 				uuid = (String) mapData.get("ID");
-				
 			}
 			
 		} 
@@ -348,17 +349,18 @@ public class HomeController {
 		log.info("insertKAKAOUser  KAKAO_ID " + KAKAO_ID);
 
 		LoginParserData parserData  = new LoginParserData();
-		
+		Map<String, Object>  mapData = null;
 		String  uuid = null;
 		
 		try {
 
-			Map<String, Object> mapData = sampleService.selectKAKAOIdUser(commandMap.getMap());
+			 mapData = sampleService.selectKAKAOIdUser(commandMap.getMap());
 
 			if(mapData == null || mapData.isEmpty()) {
 
 				
 				log.info("insertKAKAOUser mapData empty ");
+				
 				
 		        SecureRandom rnd = new SecureRandom();
 		        StringBuffer buf = new StringBuffer();
@@ -395,7 +397,6 @@ public class HomeController {
 			
 			parserData.code =  Constants.API_ERROR_CODE_TOTAL_1;
 			parserData.message =   e.toString();
-			
 			return new ResponseEntity<LoginParserData>(parserData, HttpStatus.OK);
 			
 		}
@@ -410,5 +411,42 @@ public class HomeController {
 		return new ResponseEntity<LoginParserData>(parserData, HttpStatus.OK);
 	}
 	
+	@RequestMapping(value="/api/selectLikeIDUser.do", method = RequestMethod.GET)
+	public ResponseEntity<DetailUserParserData> selectLikeIDUser(CommandMap commandMap, HttpServletRequest request, HttpServletResponse response) throws Exception{
+		
+		DetailUserParserData parserData  = new DetailUserParserData();
+		Map<String, Object>  mapData = null;
+		
+		parserData.code =  "200.0000";
+		parserData.message =  "success";
+		parserData.user.NO = (Integer) mapData.get("NO");
+		parserData.user.ID = (String) mapData.get("ID");
+		parserData.user.PASSWD = (String) mapData.get("PASSWD");
+		parserData.user.NAME = (String) mapData.get("NAME");
+		parserData.user.ADDRESS1 = (String) mapData.get("ADDRESS1");
+		parserData.user.ADDRESS2 = (String) mapData.get("ADDRESS2");
+		parserData.user.ADDRESS3 = (String) mapData.get("ADDRESS3");
+		parserData.user.ADDRESS4 = (String) mapData.get("ADDRESS4");
+		parserData.user.ADDRESS5 = (String) mapData.get("ADDRESS5");
+		parserData.user.PHONE = (String) mapData.get("PHONE");
+		parserData.user.EMAIL = (String) mapData.get("EMAIL");
+		parserData.user.DES = (String) mapData.get("DES");
+		parserData.user.IMG_1 = (String) mapData.get("IMG_1");
+		parserData.user.IMG_2 = (String) mapData.get("IMG_2");
+		parserData.user.IMG_3 = (String) mapData.get("IMG_3");
+		parserData.user.IMG_4 = (String) mapData.get("IMG_4");
+		Date date = (Date) mapData.get("REG_TIME");
+		parserData.user.REG_TIME =  DateUtil.getDateFormat(date, DateUtil.DATE_FORMAT_6);
+		parserData.user.FB_ID = (String) mapData.get("FB_ID");
+		parserData.user.KAKAO_ID = (String) mapData.get("KAKAO_ID");
+		parserData.user.LOGIN_TYPE = (String) mapData.get("LOGIN_TYPE");
+		parserData.user.FB_TOKEN = (String) mapData.get("FB_TOKEN");
+		parserData.user.KAKAO_TOKEN = (String) mapData.get("KAKAO_TOKEN");
+		parserData.user.GENDER = (String) mapData.get("GENDER");
+		parserData.user.AGE = (Integer) mapData.get("AGE");
+		
+		return new ResponseEntity<DetailUserParserData>(parserData, HttpStatus.OK);
+		
+	}
 	
 }
