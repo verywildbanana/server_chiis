@@ -26,6 +26,8 @@ public class DentistData {
 
 	public String LNG;
 
+	public String PHONE;
+	
 	public String ACTIVE_TIME1;
 
 	public String ACTIVE_TIME2;

@@ -85,6 +85,39 @@
     </select>
     
     
+    <select id="selectDentistListCount" parameterType="hashmap" resultType="int">
+        <![CDATA[  
+            select count(*) from detail_dentist
+        ]]>
+    </select>
+    
+    <select id="selectDentistList" parameterType="hashmap" resultType="hashmap">
+        <![CDATA[
+            SELECT
+               NO,
+               ID,
+	           NAME,
+	           ADDRESS1,
+	           ADDRESS2,
+	           ADDRESS3,
+	           ADDRESS4,
+	           LAT,
+	           LNG,
+	           PHONE,
+	           IMG_1,
+	           REG_TIME
+            FROM
+                detail_dentist
+           
+            ORDER BY NO DESC
+            
+            LIMIT 
+            #{FROM},
+            #{TO}
+            
+        ]]>
+	</select>
+    
     <update id="updateImg1" parameterType="hashmap">
         
         <![CDATA[
@@ -182,7 +215,34 @@
         
    </update>
     
+     <update id="updateDentistThemes" parameterType="hashmap">
+        
+        <![CDATA[
+          UPDATE detail_dentist
+          SET
+            THEME_1 = #{THEME_1},
+            THEME_2 = #{THEME_2},
+            THEME_3 = #{THEME_3},
+            THEME_4 = #{THEME_4}
+          WHERE
+            ID = #{ID} 
+        ]]>
+        
+   </update>
     
+    
+     <update id="updateDentistHashTags" parameterType="hashmap">
+        
+        <![CDATA[
+          UPDATE detail_dentist
+          SET
+            HASH_TAG_1 = #{HASH_TAG_1}
+          WHERE
+            ID = #{ID} 
+        ]]>
+        
+   </update>
+     
     <select id="selectIdDentist" parameterType="hashmap" resultType="hashmap">
         <![CDATA[
             SELECT

@@ -58,7 +58,7 @@ public class SampleDAO extends AbstractDAO{
 		if(position == 1) {
 
 			update("sample.updateImg1", map);
-			
+
 		}
 		else if(position == 2) {
 
@@ -83,7 +83,7 @@ public class SampleDAO extends AbstractDAO{
 		else if(position == 7) {
 
 			update("sample.updateImg7", map);
-			
+
 		}
 		else if(position == 8) {
 
@@ -92,39 +92,60 @@ public class SampleDAO extends AbstractDAO{
 
 	}
 
+	public void updateDentistThemes(Map<String, Object> map) throws Exception{
+
+		update("sample.updateDentistThemes", map);
+	}
+
+	public void updateDentistHashTags(Map<String, Object> map) throws Exception{
+
+		update("sample.updateDentistHashTags", map);
+	}
+	
+	
 	@SuppressWarnings("unchecked")
 	public Map<String, Object> selectIdDentist(Map<String, Object> map) throws Exception{
 		return (Map<String, Object>)selectOne("sample.selectIdDentist", map);
 	}
-	
+
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> selectDentistList(Map<String, Object> map) throws Exception{
+		return (List<Map<String, Object>>)selectList("sample.selectDentistList", map);
+	}
+
+	public int selectDentistListCount(Map<String, Object> map) throws Exception{
+		return (Integer)selectOne("sample.selectDentistListCount", map);
+	}
+
+
 	public int selectLikeFBIdCount(Map<String, Object> map) throws Exception{
 		return (Integer)selectOne("sample.selectLikFBIDCount", map);
 	}
-	
-	
+
+
 	public int selectLikeKAKAOIdCount(Map<String, Object> map) throws Exception{
 		return (Integer)selectOne("sample.selectLikKAKAOIDCount", map);
 	}
-	
+
 	public int selectUserLikeIdCount(Map<String, Object> map) throws Exception{
 		return (Integer)selectOne("sample.selectUserLikIDCount", map);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public Map<String, Object> selectIdUser(Map<String, Object> map) throws Exception{
 		return (Map<String, Object>)selectOne("sample.selectIdUser", map);
 	}
-	
+
 	public Map<String, Object> selectFBIdUser(Map<String, Object> map) throws Exception{
 		return (Map<String, Object>)selectOne("sample.selectFBIdUser", map);
 	}
-	
+
 	public Map<String, Object> selectKAKAOIdUser(Map<String, Object> map) throws Exception{
 		return (Map<String, Object>)selectOne("sample.selectKAKAOIdUser", map);
 	}
-	
+
 	public void insertUser(Map<String, Object> map) throws Exception{
 		insert("sample.insertUser", map);
 	}
-	
+
 }

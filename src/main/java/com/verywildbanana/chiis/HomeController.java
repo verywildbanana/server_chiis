@@ -3,6 +3,7 @@ package com.verywildbanana.chiis;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -26,6 +27,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.verywildbanana.chiis.common.CommandMap;
 import com.verywildbanana.chiis.dao.SampleServiceImpl;
 import com.verywildbanana.chiis.data.ApiStatusInfo;
+import com.verywildbanana.chiis.data.DentistData;
+import com.verywildbanana.chiis.data.DentistListParserData;
 import com.verywildbanana.chiis.data.DetailDentistParserData;
 import com.verywildbanana.chiis.data.DetailUserParserData;
 import com.verywildbanana.chiis.data.LoginParserData;
@@ -102,7 +105,7 @@ public class HomeController {
 	public ResponseEntity<ApiStatusInfo> insertDentist(CommandMap commandMap, HttpServletRequest request, HttpServletResponse response) throws Exception{
 
 		ApiStatusInfo info = new ApiStatusInfo();
-		
+
 		String id = request.getParameter("ID");
 		String password = request.getParameter("PASSWD");
 		String name = request.getParameter("NAME");
@@ -110,7 +113,7 @@ public class HomeController {
 		String address2 = request.getParameter("ADDRESS2");
 		String address3 = request.getParameter("ADDRESS3");
 		String phone = request.getParameter("PHONE");
-		
+
 		log.info("insertDentist " + id);
 
 		try {
@@ -143,7 +146,7 @@ public class HomeController {
 			info.message =  e.toString();
 			return new ResponseEntity<ApiStatusInfo>(
 					info, HttpStatus.CREATED);
-			
+
 		}
 
 
@@ -151,7 +154,7 @@ public class HomeController {
 		info.message =   "success";
 		return new ResponseEntity<ApiStatusInfo>(
 				info, HttpStatus.CREATED);
-		
+
 	}
 
 	@RequestMapping(value="/api/files.do", method = RequestMethod.POST, headers = "Content-Type!=multipart/form-data")
@@ -159,7 +162,7 @@ public class HomeController {
 			final HttpServletRequest request, final HttpServletResponse response) throws Exception {
 
 		FileUploadResponse fres  = new FileUploadResponse();
-		
+
 		FileInfo fileInfo = null;
 
 		try {
@@ -168,7 +171,7 @@ public class HomeController {
 
 		} catch (IOException e) {
 
-			
+
 			fres.code =  Constants.API_ERROR_CODE_TOTAL_1;
 			fres.message =  e.toString();
 			return new ResponseEntity<FileUploadResponse>(
@@ -188,7 +191,7 @@ public class HomeController {
 		commonMap.put("ID", id);
 		sampleService.updateImg(position, commonMap.getMap());
 
-		
+
 		fres.code =  "200.0000";
 		fres.message =  "success";
 		fres.setLocation(fileInfo.getDownloadUrl());
@@ -196,6 +199,72 @@ public class HomeController {
 		return new ResponseEntity<FileUploadResponse>(
 				fres, HttpStatus.CREATED);
 	}
+	
+	
+	@RequestMapping(value="/api/updateDentistThemes.do", method = RequestMethod.POST)
+	public ResponseEntity<ApiStatusInfo> updateDentistThemes(CommandMap commandMap, HttpServletRequest request, HttpServletResponse response) throws Exception{
+
+		ApiStatusInfo info = new ApiStatusInfo();
+
+		log.info("updateDentistThemes start " + commandMap.get("THEME_1"));
+		
+
+		try {
+
+			sampleService.updateDentistThemes(commandMap.getMap());
+			info.code = "200.0000";
+			info.message =   "success";
+			return new ResponseEntity<ApiStatusInfo>(
+					info, HttpStatus.CREATED);
+
+
+		} 
+		catch (Exception e) {
+
+			e.printStackTrace();
+
+			info.code = Constants.API_ERROR_CODE_TOTAL_1;
+			info.message =  e.toString();
+			return new ResponseEntity<ApiStatusInfo>(
+					info, HttpStatus.CREATED);
+
+		}
+
+
+	}
+	
+	@RequestMapping(value="/api/updateDentistHashTags.do", method = RequestMethod.POST)
+	public ResponseEntity<ApiStatusInfo> updateDentistHashTags(CommandMap commandMap, HttpServletRequest request, HttpServletResponse response) throws Exception{
+
+		ApiStatusInfo info = new ApiStatusInfo();
+
+		log.info("updateDentistHashTags start " + commandMap.get("HASH_TAG_1"));
+		
+
+		try {
+
+			sampleService.updateDentistHashTags(commandMap.getMap());
+			info.code = "200.0000";
+			info.message =   "success";
+			return new ResponseEntity<ApiStatusInfo>(
+					info, HttpStatus.CREATED);
+
+
+		} 
+		catch (Exception e) {
+
+			e.printStackTrace();
+
+			info.code = Constants.API_ERROR_CODE_TOTAL_1;
+			info.message =  e.toString();
+			return new ResponseEntity<ApiStatusInfo>(
+					info, HttpStatus.CREATED);
+
+		}
+
+	}
+	
+	
 
 	@RequestMapping(value="/api/getDentistInfo.do", method = RequestMethod.GET)
 	public ResponseEntity<DetailDentistParserData> getDentistInfo(CommandMap commandMap, final HttpServletRequest request, final HttpServletResponse response) throws Exception {
@@ -203,7 +272,7 @@ public class HomeController {
 		log.info("getDentistInfo start ");
 
 		DetailDentistParserData  parserData = new DetailDentistParserData(); 
-		
+
 		Map<String, Object>  mapData = null;
 
 		try {
@@ -216,7 +285,7 @@ public class HomeController {
 
 				parserData.code =  Constants.API_ERROR_CODE_DENTAL_2;
 				parserData.message =  Constants.API_ERROR_CODE_DENTAL_2_TXT;
-				
+
 				return new ResponseEntity<DetailDentistParserData>(parserData, HttpStatus.OK);
 
 			}
@@ -228,7 +297,7 @@ public class HomeController {
 
 			parserData.code =  Constants.API_ERROR_CODE_TOTAL_1;
 			parserData.message =   e.toString();
-			
+
 			return new ResponseEntity<DetailDentistParserData>(parserData, HttpStatus.OK);
 		}
 
@@ -246,6 +315,7 @@ public class HomeController {
 		parserData.dentist.ADDRESS5 = (String) mapData.get("ADDRESS5");
 		parserData.dentist.LAT = (String) mapData.get("LAT");
 		parserData.dentist.LNG = (String) mapData.get("LNG");
+		parserData.dentist.PHONE = (String) mapData.get("PHONE");
 		parserData.dentist.ACTIVE_TIME1 = (String) mapData.get("ACTIVE_TIME1");
 		parserData.dentist.ACTIVE_TIME2 = (String) mapData.get("ACTIVE_TIME2");
 		parserData.dentist.ACTIVE_TIME3 = (String) mapData.get("ACTIVE_TIME3");
@@ -267,186 +337,331 @@ public class HomeController {
 		parserData.dentist.REG_TIME =  DateUtil.getDateFormat(date, DateUtil.DATE_FORMAT_6);
 
 		return new ResponseEntity<DetailDentistParserData>(parserData, HttpStatus.OK);
-		
+
 	}
-	
-	
+
+	@RequestMapping(value="/api/getDentistList.do", method = RequestMethod.GET)
+	public ResponseEntity<DentistListParserData> getDentistList(CommandMap commandMap, HttpServletRequest request, HttpServletResponse response) throws Exception{
+
+
+		int page = 0;
+		int size = 20;
+		
+		
+		log.info("req getDentistList commandMap PAGE : " + commandMap.get("PAGE"));
+		
+		if(commandMap.get("PAGE") != null) {
+
+			page = Integer.parseInt((String) commandMap.get("PAGE"));
+			
+			if(commandMap.get("SIZE") != null) {
+
+				size = Integer.parseInt((String) commandMap.get("SIZE"));
+				
+			}
+			
+		}
+		
+		
+		log.info("req getDentistList page : " + page + " size : " + size);
+		
+
+		DentistListParserData  parserData = new DentistListParserData(); 
+
+		List<Map<String,Object>> list = null;
+
+		try {
+
+			int total_count = sampleService.selectDentistListCount(commandMap.getMap());
+
+			log.info("req getDentistList  total_count " + total_count );
+
+			if (total_count > 0) { 
+
+				commandMap.put("FROM", page*size);
+				commandMap.put("TO", page*size + size);
+
+			}
+
+			list = sampleService.selectDentistList(commandMap.getMap());
+
+
+			if(list == null || list.isEmpty()) {
+
+				parserData.code =  Constants.API_ERROR_CODE_DENTAL_2;
+				parserData.message =  Constants.API_ERROR_CODE_DENTAL_2_TXT;
+
+				return new ResponseEntity<DentistListParserData>(parserData, HttpStatus.OK);
+
+			}
+
+
+			parserData.code =  "200.0000";
+			parserData.message =  "success";
+			parserData.TOTAL_COUNT =  total_count;
+			
+			if(total_count > (page*size + size) ) {
+			
+				parserData.NEXT = true;
+				
+			}
+			else {
+				
+				parserData.NEXT = false;
+				
+			}
+			 
+					
+			for (int i = 0; i < list.size(); i++) {
+
+				Map<String,Object> mapData =  list.get(i);
+
+				DentistData dData = new DentistData();
+				dData.NO = (Integer) mapData.get("NO");
+				dData.ID = (String) mapData.get("ID");
+				dData.NAME = (String) mapData.get("NAME");
+				dData.ADDRESS1 = (String) mapData.get("ADDRESS1");
+				dData.ADDRESS2 = (String) mapData.get("ADDRESS2");
+				dData.ADDRESS3 = (String) mapData.get("ADDRESS3");
+				dData.ADDRESS4 = (String) mapData.get("ADDRESS4");
+				dData.LAT = (String) mapData.get("LAT");
+				dData.LNG = (String) mapData.get("LNG");
+				dData.PHONE = (String) mapData.get("PHONE");
+				dData.IMG_1 = (String) mapData.get("IMG_1");
+				Date date = (Date) mapData.get("REG_TIME");
+				dData.REG_TIME =  DateUtil.getDateFormat(date, DateUtil.DATE_FORMAT_6);
+
+				parserData.dentist.add(dData);
+
+			}
+
+			return new ResponseEntity<DentistListParserData>(parserData, HttpStatus.OK);
+
+
+		} 
+		catch (Exception e) {
+
+			e.printStackTrace();
+
+			parserData.code =  Constants.API_ERROR_CODE_TOTAL_1;
+			parserData.message =   e.toString();
+
+			return new ResponseEntity<DentistListParserData>(parserData, HttpStatus.OK);
+		}
+
+	}
+
+
+
 	@RequestMapping(value="/api/insertFBUser.do", method = RequestMethod.POST)
 	public ResponseEntity<LoginParserData> insertFBUser(CommandMap commandMap, HttpServletRequest request, HttpServletResponse response) throws Exception{
 
 		String FB_ID = request.getParameter("FB_ID");
-		
+
 		log.info("insertFBUser  FB_ID " + FB_ID);
 
 		LoginParserData parserData  = new LoginParserData();
 		Map<String, Object>  mapData = null;
 		String uuid = null;
-		
+
 		try {
 
 			mapData = sampleService.selectFBIdUser(commandMap.getMap());
 
 			if(mapData == null || mapData.isEmpty()) {
 
-				
-				log.info("insertFBUser mapData empty ");
-				
-				
-		        SecureRandom rnd = new SecureRandom();
-		        StringBuffer buf = new StringBuffer();
 
-		        buf.append(FB_ID).append("_");
-		        
-		        for (int i = 0; i < 10; i++) {
-		            if (rnd.nextBoolean()) {
-		                buf.append((char) ((int) (rnd.nextInt(26)) + 97));
-		            } else {
-		                buf.append((rnd.nextInt(10)));
-		            }
-		        }
-		        
-		        uuid = buf.toString();
-				
+				log.info("insertFBUser mapData empty ");
+
+
+				SecureRandom rnd = new SecureRandom();
+				StringBuffer buf = new StringBuffer();
+
+				buf.append(FB_ID).append("_");
+
+				for (int i = 0; i < 10; i++) {
+					if (rnd.nextBoolean()) {
+						buf.append((char) ((int) (rnd.nextInt(26)) + 97));
+					} else {
+						buf.append((rnd.nextInt(10)));
+					}
+				}
+
+				uuid = buf.toString();
+
 				commandMap.put("ID", uuid);
-				
+
 				sampleService.insertUser(commandMap.getMap());
-				
+
 			}
 			else {
-				
+
 				log.info("insertFBUser mapData not empty");
 				uuid = (String) mapData.get("ID");
 			}
-			
+
 		} 
 		catch (Exception e) {
 
 			e.printStackTrace();
 
-			
+
 			parserData.code =  Constants.API_ERROR_CODE_TOTAL_1;
 			parserData.message =   e.toString();
-			
+
 			return new ResponseEntity<LoginParserData>(parserData, HttpStatus.OK);
-			
+
 		}
 
-		
+
 		log.info("insertFBUser login.ID " + uuid);
-		
+
 		parserData.code =  "200.0000";
 		parserData.message =  "success";
 		parserData.login.ID = uuid;
-		
+
 		return new ResponseEntity<LoginParserData>(parserData, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value="/api/insertKAKAOUser.do", method = RequestMethod.POST)
 	public ResponseEntity<LoginParserData> insertKAKAOUser(CommandMap commandMap, HttpServletRequest request, HttpServletResponse response) throws Exception{
 
 		String KAKAO_ID = request.getParameter("KAKAO_ID");
-		
+
 		log.info("insertKAKAOUser  KAKAO_ID " + KAKAO_ID);
 
 		LoginParserData parserData  = new LoginParserData();
 		Map<String, Object>  mapData = null;
 		String  uuid = null;
-		
+
 		try {
 
-			 mapData = sampleService.selectKAKAOIdUser(commandMap.getMap());
+			mapData = sampleService.selectKAKAOIdUser(commandMap.getMap());
 
 			if(mapData == null || mapData.isEmpty()) {
 
-				
-				log.info("insertKAKAOUser mapData empty ");
-				
-				
-		        SecureRandom rnd = new SecureRandom();
-		        StringBuffer buf = new StringBuffer();
 
-		        buf.append(KAKAO_ID).append("_");
-		        
-		        for (int i = 0; i < 10; i++) {
-		            if (rnd.nextBoolean()) {
-		                buf.append((char) ((int) (rnd.nextInt(26)) + 97));
-		            } else {
-		                buf.append((rnd.nextInt(10)));
-		            }
-		        }
-		        
-		        uuid = buf.toString();
-				
+				log.info("insertKAKAOUser mapData empty ");
+
+
+				SecureRandom rnd = new SecureRandom();
+				StringBuffer buf = new StringBuffer();
+
+				buf.append(KAKAO_ID).append("_");
+
+				for (int i = 0; i < 10; i++) {
+					if (rnd.nextBoolean()) {
+						buf.append((char) ((int) (rnd.nextInt(26)) + 97));
+					} else {
+						buf.append((rnd.nextInt(10)));
+					}
+				}
+
+				uuid = buf.toString();
+
 				commandMap.put("ID", uuid);
-				
+
 				sampleService.insertUser(commandMap.getMap());
-				
+
 			}
 			else {
-				
+
 				log.info("insertKAKAOUser mapData not empty");
 				uuid = (String) mapData.get("ID");
-				
+
 			}
-			
+
 		} 
 		catch (Exception e) {
 
 			e.printStackTrace();
 
-			
+
 			parserData.code =  Constants.API_ERROR_CODE_TOTAL_1;
 			parserData.message =   e.toString();
 			return new ResponseEntity<LoginParserData>(parserData, HttpStatus.OK);
-			
+
 		}
 
-		
+
 		log.info("insertKAKAOUser login.ID " + uuid);
-		
+
 		parserData.code =  "200.0000";
 		parserData.message =  "success";
 		parserData.login.ID = uuid;
-		
+
 		return new ResponseEntity<LoginParserData>(parserData, HttpStatus.OK);
 	}
-	
-	@RequestMapping(value="/api/selectLikeIDUser.do", method = RequestMethod.GET)
-	public ResponseEntity<DetailUserParserData> selectLikeIDUser(CommandMap commandMap, HttpServletRequest request, HttpServletResponse response) throws Exception{
-		
+
+	@RequestMapping(value="/api/getUserInfo.do", method = RequestMethod.GET)
+	public ResponseEntity<DetailUserParserData> getUserInfo(CommandMap commandMap, HttpServletRequest request, HttpServletResponse response) throws Exception{
+
 		DetailUserParserData parserData  = new DetailUserParserData();
 		Map<String, Object>  mapData = null;
-		
-		parserData.code =  "200.0000";
-		parserData.message =  "success";
-		parserData.user.NO = (Integer) mapData.get("NO");
-		parserData.user.ID = (String) mapData.get("ID");
-		parserData.user.PASSWD = (String) mapData.get("PASSWD");
-		parserData.user.NAME = (String) mapData.get("NAME");
-		parserData.user.ADDRESS1 = (String) mapData.get("ADDRESS1");
-		parserData.user.ADDRESS2 = (String) mapData.get("ADDRESS2");
-		parserData.user.ADDRESS3 = (String) mapData.get("ADDRESS3");
-		parserData.user.ADDRESS4 = (String) mapData.get("ADDRESS4");
-		parserData.user.ADDRESS5 = (String) mapData.get("ADDRESS5");
-		parserData.user.PHONE = (String) mapData.get("PHONE");
-		parserData.user.EMAIL = (String) mapData.get("EMAIL");
-		parserData.user.DES = (String) mapData.get("DES");
-		parserData.user.IMG_1 = (String) mapData.get("IMG_1");
-		parserData.user.IMG_2 = (String) mapData.get("IMG_2");
-		parserData.user.IMG_3 = (String) mapData.get("IMG_3");
-		parserData.user.IMG_4 = (String) mapData.get("IMG_4");
-		Date date = (Date) mapData.get("REG_TIME");
-		parserData.user.REG_TIME =  DateUtil.getDateFormat(date, DateUtil.DATE_FORMAT_6);
-		parserData.user.FB_ID = (String) mapData.get("FB_ID");
-		parserData.user.KAKAO_ID = (String) mapData.get("KAKAO_ID");
-		parserData.user.LOGIN_TYPE = (String) mapData.get("LOGIN_TYPE");
-		parserData.user.FB_TOKEN = (String) mapData.get("FB_TOKEN");
-		parserData.user.KAKAO_TOKEN = (String) mapData.get("KAKAO_TOKEN");
-		parserData.user.GENDER = (String) mapData.get("GENDER");
-		parserData.user.AGE = (Integer) mapData.get("AGE");
-		
-		return new ResponseEntity<DetailUserParserData>(parserData, HttpStatus.OK);
-		
+
+		log.info("getUserInfo id  " + commandMap.get("ID"));
+
+
+
+		try{
+
+			mapData = sampleService.selectIdUser(commandMap.getMap());
+
+			if(mapData == null || mapData.isEmpty()) {
+
+				parserData.code =  Constants.API_ERROR_CODE_DENTAL_1_2;
+				parserData.message =  Constants.API_ERROR_CODE_DENTAL_1_2_TXT;
+
+				return new ResponseEntity<DetailUserParserData>(parserData, HttpStatus.OK);
+
+			}
+
+			parserData.code =  "200.0000";
+			parserData.message =  "success";
+			parserData.user.NO = (Integer) mapData.get("NO");
+			parserData.user.ID = (String) mapData.get("ID");
+			parserData.user.PASSWD = (String) mapData.get("PASSWD");
+			parserData.user.NAME = (String) mapData.get("NAME");
+			parserData.user.ADDRESS1 = (String) mapData.get("ADDRESS1");
+			parserData.user.ADDRESS2 = (String) mapData.get("ADDRESS2");
+			parserData.user.ADDRESS3 = (String) mapData.get("ADDRESS3");
+			parserData.user.ADDRESS4 = (String) mapData.get("ADDRESS4");
+			parserData.user.ADDRESS5 = (String) mapData.get("ADDRESS5");
+			parserData.user.PHONE = (String) mapData.get("PHONE");
+			parserData.user.EMAIL = (String) mapData.get("EMAIL");
+			parserData.user.DES = (String) mapData.get("DES");
+			parserData.user.IMG_1 = (String) mapData.get("IMG_1");
+			parserData.user.IMG_2 = (String) mapData.get("IMG_2");
+			parserData.user.IMG_3 = (String) mapData.get("IMG_3");
+			parserData.user.IMG_4 = (String) mapData.get("IMG_4");
+			Date date = (Date) mapData.get("REG_TIME");
+			parserData.user.REG_TIME =  DateUtil.getDateFormat(date, DateUtil.DATE_FORMAT_6);
+			parserData.user.FB_ID = (String) mapData.get("FB_ID");
+			parserData.user.KAKAO_ID = (String) mapData.get("KAKAO_ID");
+			parserData.user.LOGIN_TYPE = (String) mapData.get("LOGIN_TYPE");
+			parserData.user.FB_TOKEN = (String) mapData.get("FB_TOKEN");
+			parserData.user.KAKAO_TOKEN = (String) mapData.get("KAKAO_TOKEN");
+			parserData.user.GENDER = (String) mapData.get("GENDER");
+
+			if(mapData.get("AGE") != null) {
+
+				parserData.user.AGE = (Integer)mapData.get("AGE");
+			}
+
+			return new ResponseEntity<DetailUserParserData>(parserData, HttpStatus.OK);
+
+		} 
+		catch (Exception e) {
+
+			e.printStackTrace();
+
+			parserData.code =  Constants.API_ERROR_CODE_TOTAL_1;
+			parserData.message =   e.toString();
+
+			return new ResponseEntity<DetailUserParserData>(parserData, HttpStatus.OK);
+		}
+
 	}
-	
+
+
 }

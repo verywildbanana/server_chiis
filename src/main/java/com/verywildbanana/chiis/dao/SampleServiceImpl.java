@@ -85,11 +85,39 @@ public class SampleServiceImpl implements SampleService{
 		
 	} 
 
+	public void updateDentistThemes(Map<String, Object> map) throws Exception {
+
+		sampleDAO.updateDentistThemes(map);
+		
+	} 
+	
+	public void updateDentistHashTags(Map<String, Object> map) throws Exception {
+
+		sampleDAO.updateDentistHashTags(map);
+		
+	} 
+	
 	
 	public Map<String, Object> selectIdDentist(Map<String, Object> map) throws Exception {
 		return sampleDAO.selectIdDentist(map);
 
 	}
+	
+	public List<Map<String, Object>> selectDentistList(Map<String, Object> map) throws Exception {
+		return sampleDAO.selectDentistList(map);
+
+	}
+	
+	
+	public int selectDentistListCount(Map<String, Object> map) throws Exception {
+
+		int count = sampleDAO.selectDentistListCount(map);
+		return count;
+	} 
+
+	
+	
+	
 
 /*	
 *  user	
