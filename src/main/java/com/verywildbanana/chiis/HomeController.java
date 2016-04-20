@@ -335,6 +335,13 @@ public class HomeController {
 		parserData.dentist.DT_3_IMG = (String) mapData.get("DT_3_IMG");
 		Date date = (Date) mapData.get("REG_TIME");
 		parserData.dentist.REG_TIME =  DateUtil.getDateFormat(date, DateUtil.DATE_FORMAT_6);
+		
+		parserData.dentist.THEME_1 = (String) mapData.get("THEME_1");
+		parserData.dentist.THEME_2 = (String) mapData.get("THEME_2");
+		parserData.dentist.THEME_3 = (String) mapData.get("THEME_3");
+		parserData.dentist.THEME_4 = (String) mapData.get("THEME_4");
+		
+		if(mapData.get("HASH_TAG_1") != null) parserData.dentist.HASH_TAG_1 = (String) mapData.get("HASH_TAG_1");
 
 		return new ResponseEntity<DetailDentistParserData>(parserData, HttpStatus.OK);
 
@@ -430,7 +437,8 @@ public class HomeController {
 				dData.IMG_1 = (String) mapData.get("IMG_1");
 				Date date = (Date) mapData.get("REG_TIME");
 				dData.REG_TIME =  DateUtil.getDateFormat(date, DateUtil.DATE_FORMAT_6);
-
+				if(mapData.get("HASH_TAG_1") != null) dData.HASH_TAG_1 = (String) mapData.get("HASH_TAG_1");
+				
 				parserData.dentist.add(dData);
 
 			}

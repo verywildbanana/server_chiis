@@ -65,5 +65,16 @@ public class DentistData {
 	public String DT_3_IMG;
 
 	public String REG_TIME;
+	
+	public String THEME_1;
+	
+	public String THEME_2;
+	
+	public String THEME_3;
+	
+	public String THEME_4;
+	
+	public String HASH_TAG_1;
+	
 
 }

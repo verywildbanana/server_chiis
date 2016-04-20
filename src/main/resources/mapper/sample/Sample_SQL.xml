@@ -105,7 +105,8 @@
 	           LNG,
 	           PHONE,
 	           IMG_1,
-	           REG_TIME
+	           REG_TIME,
+	           HASH_TAG_1
             FROM
                 detail_dentist
            
