@@ -113,10 +113,45 @@ public class SampleDAO extends AbstractDAO{
 		return (List<Map<String, Object>>)selectList("sample.selectDentistList", map);
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> selectDentistTheme1List(Map<String, Object> map) throws Exception{
+		return (List<Map<String, Object>>)selectList("sample.selectDentistTheme1List", map);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> selectDentistTheme2List(Map<String, Object> map) throws Exception{
+		return (List<Map<String, Object>>)selectList("sample.selectDentistTheme2List", map);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> selectDentistTheme3List(Map<String, Object> map) throws Exception{
+		return (List<Map<String, Object>>)selectList("sample.selectDentistTheme3List", map);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> selectDentistTheme4List(Map<String, Object> map) throws Exception{
+		return (List<Map<String, Object>>)selectList("sample.selectDentistTheme4List", map);
+	}
+	
 	public int selectDentistListCount(Map<String, Object> map) throws Exception{
 		return (Integer)selectOne("sample.selectDentistListCount", map);
 	}
 
+	public int selectDentistTheme1ListCount(Map<String, Object> map) throws Exception{
+		return (Integer)selectOne("sample.selectDentistTheme1ListCount", map);
+	}
+	
+	public int selectDentistTheme2ListCount(Map<String, Object> map) throws Exception{
+		return (Integer)selectOne("sample.selectDentistTheme2ListCount", map);
+	}
+	
+	public int selectDentistTheme3ListCount(Map<String, Object> map) throws Exception{
+		return (Integer)selectOne("sample.selectDentistTheme3ListCount", map);
+	}
+	
+	public int selectDentistTheme4ListCount(Map<String, Object> map) throws Exception{
+		return (Integer)selectOne("sample.selectDentistTheme4ListCount", map);
+	}
 
 	public int selectLikeFBIdCount(Map<String, Object> map) throws Exception{
 		return (Integer)selectOne("sample.selectLikFBIDCount", map);

@@ -108,6 +108,28 @@ public class SampleServiceImpl implements SampleService{
 
 	}
 	
+	public List<Map<String, Object>> selectDentistTheme1List(Map<String, Object> map) throws Exception {
+		return sampleDAO.selectDentistTheme1List(map);
+
+	}
+	
+	public List<Map<String, Object>> selectDentistTheme2List(Map<String, Object> map) throws Exception {
+		return sampleDAO.selectDentistTheme2List(map);
+
+	}
+	
+	public List<Map<String, Object>> selectDentistTheme3List(Map<String, Object> map) throws Exception {
+		return sampleDAO.selectDentistTheme3List(map);
+
+	}
+	
+	
+	public List<Map<String, Object>> selectDentistTheme4List(Map<String, Object> map) throws Exception {
+		return sampleDAO.selectDentistTheme4List(map);
+
+	}
+	
+	
 	
 	public int selectDentistListCount(Map<String, Object> map) throws Exception {
 
@@ -115,6 +137,31 @@ public class SampleServiceImpl implements SampleService{
 		return count;
 	} 
 
+	public int selectDentistTheme1ListCount(Map<String, Object> map) throws Exception {
+
+		int count = sampleDAO.selectDentistTheme1ListCount(map);
+		return count;
+	} 
+	
+	public int selectDentistTheme2ListCount(Map<String, Object> map) throws Exception {
+
+		int count = sampleDAO.selectDentistTheme2ListCount(map);
+		return count;
+	} 
+	
+	public int selectDentistTheme3ListCount(Map<String, Object> map) throws Exception {
+
+		int count = sampleDAO.selectDentistTheme3ListCount(map);
+		return count;
+	} 
+	
+	public int selectDentistTheme4ListCount(Map<String, Object> map) throws Exception {
+
+		int count = sampleDAO.selectDentistTheme4ListCount(map);
+		return count;
+	} 
+	
+	
 	
 	
 	

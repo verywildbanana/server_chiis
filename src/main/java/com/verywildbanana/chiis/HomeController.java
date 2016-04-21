@@ -199,15 +199,15 @@ public class HomeController {
 		return new ResponseEntity<FileUploadResponse>(
 				fres, HttpStatus.CREATED);
 	}
-	
-	
+
+
 	@RequestMapping(value="/api/updateDentistThemes.do", method = RequestMethod.POST)
 	public ResponseEntity<ApiStatusInfo> updateDentistThemes(CommandMap commandMap, HttpServletRequest request, HttpServletResponse response) throws Exception{
 
 		ApiStatusInfo info = new ApiStatusInfo();
 
 		log.info("updateDentistThemes start " + commandMap.get("THEME_1"));
-		
+
 
 		try {
 
@@ -232,14 +232,14 @@ public class HomeController {
 
 
 	}
-	
+
 	@RequestMapping(value="/api/updateDentistHashTags.do", method = RequestMethod.POST)
 	public ResponseEntity<ApiStatusInfo> updateDentistHashTags(CommandMap commandMap, HttpServletRequest request, HttpServletResponse response) throws Exception{
 
 		ApiStatusInfo info = new ApiStatusInfo();
 
 		log.info("updateDentistHashTags start " + commandMap.get("HASH_TAG_1"));
-		
+
 
 		try {
 
@@ -263,8 +263,8 @@ public class HomeController {
 		}
 
 	}
-	
-	
+
+
 
 	@RequestMapping(value="/api/getDentistInfo.do", method = RequestMethod.GET)
 	public ResponseEntity<DetailDentistParserData> getDentistInfo(CommandMap commandMap, final HttpServletRequest request, final HttpServletResponse response) throws Exception {
@@ -335,12 +335,12 @@ public class HomeController {
 		parserData.dentist.DT_3_IMG = (String) mapData.get("DT_3_IMG");
 		Date date = (Date) mapData.get("REG_TIME");
 		parserData.dentist.REG_TIME =  DateUtil.getDateFormat(date, DateUtil.DATE_FORMAT_6);
-		
+
 		parserData.dentist.THEME_1 = (String) mapData.get("THEME_1");
 		parserData.dentist.THEME_2 = (String) mapData.get("THEME_2");
 		parserData.dentist.THEME_3 = (String) mapData.get("THEME_3");
 		parserData.dentist.THEME_4 = (String) mapData.get("THEME_4");
-		
+
 		if(mapData.get("HASH_TAG_1") != null) parserData.dentist.HASH_TAG_1 = (String) mapData.get("HASH_TAG_1");
 
 		return new ResponseEntity<DetailDentistParserData>(parserData, HttpStatus.OK);
@@ -353,25 +353,25 @@ public class HomeController {
 
 		int page = 0;
 		int size = 20;
-		
-		
+
+
 		log.info("req getDentistList commandMap PAGE : " + commandMap.get("PAGE"));
-		
+
 		if(commandMap.get("PAGE") != null) {
 
 			page = Integer.parseInt((String) commandMap.get("PAGE"));
-			
+
 			if(commandMap.get("SIZE") != null) {
 
 				size = Integer.parseInt((String) commandMap.get("SIZE"));
-				
+
 			}
-			
+
 		}
-		
-		
+
+
 		log.info("req getDentistList page : " + page + " size : " + size);
-		
+
 
 		DentistListParserData  parserData = new DentistListParserData(); 
 
@@ -388,6 +388,14 @@ public class HomeController {
 				commandMap.put("FROM", page*size);
 				commandMap.put("TO", page*size + size);
 
+			}
+			else {
+				
+				parserData.code =  Constants.API_ERROR_CODE_DENTAL_2;
+				parserData.message =  Constants.API_ERROR_CODE_DENTAL_2_TXT;
+
+				return new ResponseEntity<DentistListParserData>(parserData, HttpStatus.OK);
+				
 			}
 
 			list = sampleService.selectDentistList(commandMap.getMap());
@@ -406,19 +414,19 @@ public class HomeController {
 			parserData.code =  "200.0000";
 			parserData.message =  "success";
 			parserData.TOTAL_COUNT =  total_count;
-			
+
 			if(total_count > (page*size + size) ) {
-			
+
 				parserData.NEXT = true;
-				
+
 			}
 			else {
-				
+
 				parserData.NEXT = false;
-				
+
 			}
-			 
-					
+
+
 			for (int i = 0; i < list.size(); i++) {
 
 				Map<String,Object> mapData =  list.get(i);
@@ -438,7 +446,7 @@ public class HomeController {
 				Date date = (Date) mapData.get("REG_TIME");
 				dData.REG_TIME =  DateUtil.getDateFormat(date, DateUtil.DATE_FORMAT_6);
 				if(mapData.get("HASH_TAG_1") != null) dData.HASH_TAG_1 = (String) mapData.get("HASH_TAG_1");
-				
+
 				parserData.dentist.add(dData);
 
 			}
@@ -458,6 +466,168 @@ public class HomeController {
 		}
 
 	}
+
+
+	@RequestMapping(value="/api/selectDentistThemeList.do", method = RequestMethod.GET)
+	public ResponseEntity<DentistListParserData> selectDentistThemeList(CommandMap commandMap, HttpServletRequest request, HttpServletResponse response) throws Exception{
+
+
+		int page = 0;
+		int size = 20;
+
+
+		String theme = (String) commandMap.get("THEME");
+
+		log.info("req selectDentistThemeList commandMap THEME : " + commandMap.get("THEME"));
+		log.info("req selectDentistThemeList commandMap PAGE : " + commandMap.get("PAGE"));
+
+		if(commandMap.get("PAGE") != null) {
+
+			page = Integer.parseInt((String) commandMap.get("PAGE"));
+
+			if(commandMap.get("SIZE") != null) {
+
+				size = Integer.parseInt((String) commandMap.get("SIZE"));
+
+			}
+
+		}
+
+
+		log.info("req selectDentistThemeList page : " + page + " size : " + size);
+
+
+		DentistListParserData  parserData = new DentistListParserData(); 
+
+		List<Map<String,Object>> list = null;
+
+		try {
+
+			int total_count = 0;
+
+			if(theme.equalsIgnoreCase("THEME_1")) {
+
+				total_count = sampleService.selectDentistTheme1ListCount(commandMap.getMap());
+
+			}
+			else if(theme.equalsIgnoreCase("THEME_2")) {
+
+				total_count = sampleService.selectDentistTheme2ListCount(commandMap.getMap());
+			}
+			else if(theme.equalsIgnoreCase("THEME_3")) {
+
+				total_count = sampleService.selectDentistTheme3ListCount(commandMap.getMap());
+			}
+			else if(theme.equalsIgnoreCase("THEME_4")) {
+
+				total_count = sampleService.selectDentistTheme4ListCount(commandMap.getMap());
+			}
+
+			log.info("req selectDentistThemeList  total_count " + total_count );
+
+			if (total_count > 0) { 
+
+				commandMap.put("FROM", page*size);
+				commandMap.put("TO", page*size + size);
+
+			}
+			else {
+				
+				parserData.code =  Constants.API_ERROR_CODE_DENTAL_2;
+				parserData.message =  Constants.API_ERROR_CODE_DENTAL_2_TXT;
+
+				return new ResponseEntity<DentistListParserData>(parserData, HttpStatus.OK);
+				
+			}
+
+			
+			if(theme.equalsIgnoreCase("THEME_1")) {
+
+				list = sampleService.selectDentistTheme1List(commandMap.getMap());
+
+			}
+			else if(theme.equalsIgnoreCase("THEME_2")) {
+
+				list = sampleService.selectDentistTheme2List(commandMap.getMap());
+			}
+			else if(theme.equalsIgnoreCase("THEME_3")) {
+
+				list = sampleService.selectDentistTheme3List(commandMap.getMap());
+			}
+			else if(theme.equalsIgnoreCase("THEME_4")) {
+
+				list = sampleService.selectDentistTheme4List(commandMap.getMap());
+			}
+
+
+			if(list == null || list.isEmpty()) {
+
+				parserData.code =  Constants.API_ERROR_CODE_DENTAL_2;
+				parserData.message =  Constants.API_ERROR_CODE_DENTAL_2_TXT;
+
+				return new ResponseEntity<DentistListParserData>(parserData, HttpStatus.OK);
+
+			}
+
+
+			parserData.code =  "200.0000";
+			parserData.message =  "success";
+			parserData.TOTAL_COUNT =  total_count;
+
+			if(total_count > (page*size + size) ) {
+
+				parserData.NEXT = true;
+
+			}
+			else {
+
+				parserData.NEXT = false;
+
+			}
+
+
+			for (int i = 0; i < list.size(); i++) {
+
+				Map<String,Object> mapData =  list.get(i);
+
+				DentistData dData = new DentistData();
+				dData.NO = (Integer) mapData.get("NO");
+				dData.ID = (String) mapData.get("ID");
+				dData.NAME = (String) mapData.get("NAME");
+				dData.ADDRESS1 = (String) mapData.get("ADDRESS1");
+				dData.ADDRESS2 = (String) mapData.get("ADDRESS2");
+				dData.ADDRESS3 = (String) mapData.get("ADDRESS3");
+				dData.ADDRESS4 = (String) mapData.get("ADDRESS4");
+				dData.LAT = (String) mapData.get("LAT");
+				dData.LNG = (String) mapData.get("LNG");
+				dData.PHONE = (String) mapData.get("PHONE");
+				dData.IMG_1 = (String) mapData.get("IMG_1");
+				Date date = (Date) mapData.get("REG_TIME");
+				dData.REG_TIME =  DateUtil.getDateFormat(date, DateUtil.DATE_FORMAT_6);
+				if(mapData.get("HASH_TAG_1") != null) dData.HASH_TAG_1 = (String) mapData.get("HASH_TAG_1");
+
+				parserData.dentist.add(dData);
+
+			}
+
+			return new ResponseEntity<DentistListParserData>(parserData, HttpStatus.OK);
+
+
+		} 
+		catch (Exception e) {
+
+			e.printStackTrace();
+
+			parserData.code =  Constants.API_ERROR_CODE_TOTAL_1;
+			parserData.message =   e.toString();
+
+			return new ResponseEntity<DentistListParserData>(parserData, HttpStatus.OK);
+		}
+
+	}
+
+
+
 
 
 

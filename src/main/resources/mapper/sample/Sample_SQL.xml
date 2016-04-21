@@ -119,6 +119,157 @@
         ]]>
 	</select>
     
+    
+    <select id="selectDentistTheme1ListCount" parameterType="hashmap" resultType="int">
+        <![CDATA[  
+            select count(*) from detail_dentist  WHERE THEME_1 = 'Y' 
+        ]]>
+    </select>
+    
+     <select id="selectDentistTheme2ListCount" parameterType="hashmap" resultType="int">
+        <![CDATA[  
+            select count(*) from detail_dentist  WHERE THEME_2 = 'Y' 
+        ]]>
+    </select>
+    
+      <select id="selectDentistTheme3ListCount" parameterType="hashmap" resultType="int">
+        <![CDATA[  
+            select count(*) from detail_dentist  WHERE THEME_3 = 'Y' 
+        ]]>
+    </select>
+    
+       <select id="selectDentistTheme4ListCount" parameterType="hashmap" resultType="int">
+        <![CDATA[  
+            select count(*) from detail_dentist  WHERE THEME_4 = 'Y' 
+        ]]>
+    </select>
+    
+    <select id="selectDentistTheme1List" parameterType="hashmap" resultType="hashmap">
+        <![CDATA[
+            SELECT
+               NO,
+               ID,
+	           NAME,
+	           ADDRESS1,
+	           ADDRESS2,
+	           ADDRESS3,
+	           ADDRESS4,
+	           LAT,
+	           LNG,
+	           PHONE,
+	           IMG_1,
+	           REG_TIME,
+	           HASH_TAG_1
+            FROM
+                detail_dentist
+           
+            WHERE 
+                THEME_1 = 'Y' 
+                
+            ORDER BY NO DESC
+            
+            LIMIT 
+            #{FROM},
+            #{TO}
+            
+        ]]>
+	</select>
+    
+    <select id="selectDentistTheme2List" parameterType="hashmap" resultType="hashmap">
+        <![CDATA[
+            SELECT
+               NO,
+               ID,
+	           NAME,
+	           ADDRESS1,
+	           ADDRESS2,
+	           ADDRESS3,
+	           ADDRESS4,
+	           LAT,
+	           LNG,
+	           PHONE,
+	           IMG_1,
+	           REG_TIME,
+	           HASH_TAG_1
+            FROM
+                detail_dentist
+           
+            WHERE 
+                THEME_2 = 'Y' 
+                
+            ORDER BY NO DESC
+            
+            LIMIT 
+            #{FROM},
+            #{TO}
+            
+        ]]>
+	</select>
+	
+    <select id="selectDentistTheme3List" parameterType="hashmap" resultType="hashmap">
+        <![CDATA[
+            SELECT
+               NO,
+               ID,
+	           NAME,
+	           ADDRESS1,
+	           ADDRESS2,
+	           ADDRESS3,
+	           ADDRESS4,
+	           LAT,
+	           LNG,
+	           PHONE,
+	           IMG_1,
+	           REG_TIME,
+	           HASH_TAG_1
+            FROM
+                detail_dentist
+           
+            WHERE 
+                THEME_3 = 'Y' 
+                
+            ORDER BY NO DESC
+            
+            LIMIT 
+            #{FROM},
+            #{TO}
+            
+        ]]>
+	</select>
+	
+    
+    <select id="selectDentistTheme4List" parameterType="hashmap" resultType="hashmap">
+        <![CDATA[
+            SELECT
+               NO,
+               ID,
+	           NAME,
+	           ADDRESS1,
+	           ADDRESS2,
+	           ADDRESS3,
+	           ADDRESS4,
+	           LAT,
+	           LNG,
+	           PHONE,
+	           IMG_1,
+	           REG_TIME,
+	           HASH_TAG_1
+            FROM
+                detail_dentist
+           
+            WHERE 
+                THEME_4 = 'Y' 
+                
+            ORDER BY NO DESC
+            
+            LIMIT 
+            #{FROM},
+            #{TO}
+            
+        ]]>
+	</select>
+    
+    
     <update id="updateImg1" parameterType="hashmap">
         
         <![CDATA[
