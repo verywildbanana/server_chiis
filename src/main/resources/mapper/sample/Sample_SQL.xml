@@ -408,7 +408,85 @@
 	</select>
     
     
+     <select id="searchDentistList" parameterType="hashmap" resultType="hashmap">
+        <![CDATA[
+            SELECT
+               NO,
+               ID,
+	           NAME,
+	           ADDRESS1,
+	           ADDRESS2,
+	           ADDRESS3,
+	           ADDRESS4,
+	           LAT,
+	           LNG,
+	           PHONE,
+	           IMG_1,
+	           REG_TIME,
+	           HASH_TAG_1
+            FROM
+                detail_dentist
+           
+            WHERE NAME like #{KEYWORD} 
+            
+            ORDER BY NO DESC
+            
+            LIMIT 
+            #{FROM},
+            #{TO}
+            
+        ]]>
+	</select>
     
+    
+      <select id="searchDentistListCount" parameterType="hashmap" resultType="int">
+        <![CDATA[  
+            select count(*) from detail_dentist WHERE NAME like #{KEYWORD}
+        ]]>
+    </select>
+     
+     
+      
+      <select id="searchTagDentistList" parameterType="hashmap" resultType="hashmap">
+        <![CDATA[
+            SELECT
+               NO,
+               ID,
+	           NAME,
+	           ADDRESS1,
+	           ADDRESS2,
+	           ADDRESS3,
+	           ADDRESS4,
+	           LAT,
+	           LNG,
+	           PHONE,
+	           IMG_1,
+	           REG_TIME,
+	           HASH_TAG_1
+            FROM
+                detail_dentist
+           
+            WHERE HASH_TAG_1 like #{TAG} 
+            
+            ORDER BY NO DESC
+            
+            LIMIT 
+            #{FROM},
+            #{TO}
+            
+        ]]>
+	</select>
+      
+     
+    <select id="searchTagDentistListCount" parameterType="hashmap" resultType="int">
+        <![CDATA[  
+            select count(*) from detail_dentist WHERE HASH_TAG_1 like #{TAG}
+        ]]>
+    </select>
+     
+     
+     
+     
     
     
     <insert id="insertUser" parameterType="hashmap">
@@ -626,6 +704,90 @@
         	AND DEL_GB = 'N'		
      ]]>    
      </select>
+     
+     
+     
+     
+     
+     
+     
+     <insert id="insertUserInquiry" parameterType="hashmap">
+       
+        <![CDATA[
+          INSERT INTO user_inquiry
+          (
+            USER_ID,
+            NAME,
+            ADDRESS1,
+            ADDRESS2,
+            AGE,
+            DES,
+            IMG_1,
+            IMG_2,
+            IMG_3,
+            GENDER,
+            P_1,
+            P_2,
+            P_3,
+            P_4,
+            P_5,
+            P_6,
+            INQUIRY_ID,
+            DENTIST_ID
+            
+          )
+          VALUES
+          (
+           #{USER_ID},
+           #{NAME},
+           #{ADDRESS1},
+           #{ADDRESS2},
+           #{AGE},
+           #{DES},
+           #{IMG_1},
+           #{IMG_2},
+           #{IMG_3},
+           #{GENDER},
+           #{P_1},
+           #{P_2},
+           #{P_3},
+           #{P_4},
+           #{P_5},
+           #{P_6},
+           #{INQUIRY_ID},
+           #{DENTIST_ID}
+           )
+        ]]>
+	</insert>
+     
+     
+     
+       
+     <insert id="insertDentistReply" parameterType="hashmap">
+       
+        <![CDATA[
+          INSERT INTO dentist_reply
+          (
+            DENTIST_ID,
+            INQUIRY_ID,
+            REPLY_ID,
+            NAME,
+            DES,
+            IMG_1
+            
+          )
+          VALUES
+          (
+           #{DENTIST_ID},
+           #{INQUIRY_ID},
+           #{REPLY_ID},
+           #{NAME},
+           #{DES},
+           #{IMG_1}
+           )
+        ]]>
+	</insert>
+     
      
     
 </mapper>

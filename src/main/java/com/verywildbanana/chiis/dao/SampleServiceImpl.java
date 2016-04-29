@@ -162,7 +162,28 @@ public class SampleServiceImpl implements SampleService{
 	} 
 	
 	
+	public int searchDentistListCount(Map<String, Object> map) throws Exception {
+
+		int count = sampleDAO.searchDentistListCount(map);
+		return count;
+	} 
 	
+	public List<Map<String, Object>> searchDentistList(Map<String, Object> map) throws Exception {
+		return sampleDAO.searchDentistList(map);
+
+	}
+	
+	
+	public int searchTagDentistListCount(Map<String, Object> map) throws Exception {
+
+		int count = sampleDAO.searchTagDentistListCount(map);
+		return count;
+	} 
+	
+	public List<Map<String, Object>> searchTagDentistList(Map<String, Object> map) throws Exception {
+		return sampleDAO.searchTagDentistList(map);
+
+	}
 	
 	
 
@@ -207,4 +228,23 @@ public class SampleServiceImpl implements SampleService{
 		int count = sampleDAO.selectLikeKAKAOIdCount(map);
 		return count;
 	} 
+	
+	/*
+	 *  inquiry reply 
+	*/
+	
+	public void insertUserInquiry(Map<String, Object> map) throws Exception {
+
+		sampleDAO.insertUserInquiry(map);
+	}
+	
+	public void insertDentistReply(Map<String, Object> map) throws Exception {
+
+		sampleDAO.insertDentistReply(map);
+	}
+	
+	
+	
+	
+	
 }

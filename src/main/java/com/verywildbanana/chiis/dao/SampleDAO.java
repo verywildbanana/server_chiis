@@ -114,6 +114,17 @@ public class SampleDAO extends AbstractDAO{
 	}
 
 	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> searchDentistList(Map<String, Object> map) throws Exception{
+		return (List<Map<String, Object>>)selectList("sample.searchDentistList", map);
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> searchTagDentistList(Map<String, Object> map) throws Exception{
+		return (List<Map<String, Object>>)selectList("sample.searchTagDentistList", map);
+	}
+	
+	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> selectDentistTheme1List(Map<String, Object> map) throws Exception{
 		return (List<Map<String, Object>>)selectList("sample.selectDentistTheme1List", map);
 	}
@@ -137,6 +148,14 @@ public class SampleDAO extends AbstractDAO{
 		return (Integer)selectOne("sample.selectDentistListCount", map);
 	}
 
+	public int searchDentistListCount(Map<String, Object> map) throws Exception{
+		return (Integer)selectOne("sample.searchDentistListCount", map);
+	}
+	
+	public int searchTagDentistListCount(Map<String, Object> map) throws Exception{
+		return (Integer)selectOne("sample.searchTagDentistListCount", map);
+	}
+	
 	public int selectDentistTheme1ListCount(Map<String, Object> map) throws Exception{
 		return (Integer)selectOne("sample.selectDentistTheme1ListCount", map);
 	}
@@ -182,5 +201,14 @@ public class SampleDAO extends AbstractDAO{
 	public void insertUser(Map<String, Object> map) throws Exception{
 		insert("sample.insertUser", map);
 	}
-
+	
+	
+	public void insertUserInquiry(Map<String, Object> map) throws Exception{
+		insert("sample.insertUserInquiry", map);
+	}
+	
+	public void insertDentistReply(Map<String, Object> map) throws Exception{
+		insert("sample.insertDentistReply", map);
+	}
+	
 }

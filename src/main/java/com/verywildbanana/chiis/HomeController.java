@@ -1,6 +1,7 @@
 package com.verywildbanana.chiis;
 
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.security.SecureRandom;
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -372,7 +373,6 @@ public class HomeController {
 
 		log.info("req getDentistList page : " + page + " size : " + size);
 
-
 		DentistListParserData  parserData = new DentistListParserData(); 
 
 		List<Map<String,Object>> list = null;
@@ -390,16 +390,203 @@ public class HomeController {
 
 			}
 			else {
-				
+
 				parserData.code =  Constants.API_ERROR_CODE_DENTAL_2;
 				parserData.message =  Constants.API_ERROR_CODE_DENTAL_2_TXT;
 
 				return new ResponseEntity<DentistListParserData>(parserData, HttpStatus.OK);
-				
+
 			}
 
 			list = sampleService.selectDentistList(commandMap.getMap());
 
+
+			if(list == null || list.isEmpty()) {
+
+				parserData.code =  Constants.API_ERROR_CODE_DENTAL_2;
+				parserData.message =  Constants.API_ERROR_CODE_DENTAL_2_TXT;
+
+				return new ResponseEntity<DentistListParserData>(parserData, HttpStatus.OK);
+
+			}
+
+
+			parserData.code =  "200.0000";
+			parserData.message =  "success";
+			parserData.TOTAL_COUNT =  total_count;
+
+			if(total_count > (page*size + size) ) {
+
+				parserData.NEXT = true;
+
+			}
+			else {
+
+				parserData.NEXT = false;
+
+			}
+
+
+			for (int i = 0; i < list.size(); i++) {
+
+				Map<String,Object> mapData =  list.get(i);
+
+				DentistData dData = new DentistData();
+				dData.NO = (Integer) mapData.get("NO");
+				dData.ID = (String) mapData.get("ID");
+				dData.NAME = (String) mapData.get("NAME");
+				dData.ADDRESS1 = (String) mapData.get("ADDRESS1");
+				dData.ADDRESS2 = (String) mapData.get("ADDRESS2");
+				dData.ADDRESS3 = (String) mapData.get("ADDRESS3");
+				dData.ADDRESS4 = (String) mapData.get("ADDRESS4");
+				dData.LAT = (String) mapData.get("LAT");
+				dData.LNG = (String) mapData.get("LNG");
+				dData.PHONE = (String) mapData.get("PHONE");
+				dData.IMG_1 = (String) mapData.get("IMG_1");
+				Date date = (Date) mapData.get("REG_TIME");
+				dData.REG_TIME =  DateUtil.getDateFormat(date, DateUtil.DATE_FORMAT_6);
+				if(mapData.get("HASH_TAG_1") != null) dData.HASH_TAG_1 = (String) mapData.get("HASH_TAG_1");
+
+				parserData.dentist.add(dData);
+
+			}
+
+			return new ResponseEntity<DentistListParserData>(parserData, HttpStatus.OK);
+
+
+		} 
+		catch (Exception e) {
+
+			e.printStackTrace();
+
+			parserData.code =  Constants.API_ERROR_CODE_TOTAL_1;
+			parserData.message =   e.toString();
+
+			return new ResponseEntity<DentistListParserData>(parserData, HttpStatus.OK);
+		}
+
+	}
+
+
+	@RequestMapping(value="/api/searchDentistList.do", method = RequestMethod.GET)
+	public ResponseEntity<DentistListParserData> searchDentistList(CommandMap commandMap, HttpServletRequest request, HttpServletResponse response) throws Exception{
+
+
+		int page = 0;
+		int size = 20;
+
+
+		log.info("req searchDentistList commandMap PAGE : " + commandMap.get("PAGE"));
+
+		if(commandMap.get("PAGE") != null) {
+
+			page = Integer.parseInt((String) commandMap.get("PAGE"));
+
+			if(commandMap.get("SIZE") != null) {
+
+				size = Integer.parseInt((String) commandMap.get("SIZE"));
+
+			}
+
+		}
+
+
+		log.info("req searchDentistList page : " + page + " size : " + size);
+
+		log.info("req searchDentistList commandMap TYPE : " + commandMap.get("TYPE"));
+
+
+		String type = (String) commandMap.get("TYPE");
+
+
+		if(type.equalsIgnoreCase("TAG")) {
+
+
+			log.info("req searchDentistList commandMap TAG : " + commandMap.get("QUERY"));
+
+			String tag  = (String) commandMap.get("QUERY");
+
+			tag = URLDecoder.decode(tag, "UTF-8");
+			
+			StringBuffer buffer = new StringBuffer();
+			buffer.append("%").append(tag).append("%");
+
+			commandMap.put("TAG", buffer.toString());
+
+
+			log.info("req searchDentistList commandMap TAG :: " + commandMap.get("TAG"));
+
+		}
+		else {
+
+
+			log.info("req searchDentistList commandMap KEYWORD : " + commandMap.get("QUERY"));
+
+			String keyword  = (String) commandMap.get("QUERY");
+
+			keyword = URLDecoder.decode(keyword, "UTF-8");
+			
+			StringBuffer buffer = new StringBuffer();
+			buffer.append("%").append(keyword).append("%");
+
+			commandMap.put("KEYWORD", buffer.toString());
+
+
+			log.info("req searchDentistList commandMap KEYWORD :: " + commandMap.get("KEYWORD"));
+
+
+		}
+
+
+
+		DentistListParserData  parserData = new DentistListParserData(); 
+
+		List<Map<String,Object>> list = null;
+
+		try {
+
+			int total_count = 0;
+			
+			if(type.equalsIgnoreCase("TAG")) {
+				
+				 total_count = sampleService.searchTagDentistListCount(commandMap.getMap());
+			}
+			else {
+			
+				 total_count = sampleService.searchDentistListCount(commandMap.getMap());
+				
+			}
+			
+
+			log.info("req searchDentistList  total_count " + total_count );
+
+			if (total_count > 0) { 
+
+				commandMap.put("FROM", page*size);
+				commandMap.put("TO", page*size + size);
+
+			}
+			else {
+
+				parserData.code =  Constants.API_ERROR_CODE_DENTAL_2;
+				parserData.message =  Constants.API_ERROR_CODE_DENTAL_2_TXT;
+
+				return new ResponseEntity<DentistListParserData>(parserData, HttpStatus.OK);
+
+			}
+
+			if(type.equalsIgnoreCase("TAG")) {
+				
+				
+				list = sampleService.searchTagDentistList(commandMap.getMap());
+				
+			}
+			else {
+			
+				list = sampleService.searchDentistList(commandMap.getMap());
+				
+			}
+			
 
 			if(list == null || list.isEmpty()) {
 
@@ -532,15 +719,15 @@ public class HomeController {
 
 			}
 			else {
-				
+
 				parserData.code =  Constants.API_ERROR_CODE_DENTAL_2;
 				parserData.message =  Constants.API_ERROR_CODE_DENTAL_2_TXT;
 
 				return new ResponseEntity<DentistListParserData>(parserData, HttpStatus.OK);
-				
+
 			}
 
-			
+
 			if(theme.equalsIgnoreCase("THEME_1")) {
 
 				list = sampleService.selectDentistTheme1List(commandMap.getMap());
@@ -841,5 +1028,151 @@ public class HomeController {
 
 	}
 
+	
+	
+	@RequestMapping(value="/api/insertUserInquiry.do", method = RequestMethod.POST)
+	public ResponseEntity<ApiStatusInfo> insertUserInquiry(CommandMap commandMap, HttpServletRequest request, HttpServletResponse response) throws Exception{
 
+		String USER_ID = request.getParameter("USER_ID");
+
+		log.info("insertUserInquiry  USER_ID " + USER_ID);
+
+		ApiStatusInfo parserData  = new ApiStatusInfo();
+		String uuid = null;
+
+		try {
+
+
+				SecureRandom rnd = new SecureRandom();
+				StringBuffer buf = new StringBuffer();
+
+				buf.append(USER_ID).append("_");
+
+				for (int i = 0; i < 10; i++) {
+					if (rnd.nextBoolean()) {
+						buf.append((char) ((int) (rnd.nextInt(26)) + 97));
+					} else {
+						buf.append((rnd.nextInt(10)));
+					}
+				}
+
+				uuid = buf.toString();
+
+				commandMap.put("INQUIRY_ID", uuid);
+
+				sampleService.insertUserInquiry(commandMap.getMap());
+
+
+		} 
+		catch (Exception e) {
+
+			e.printStackTrace();
+
+
+			parserData.code =  Constants.API_ERROR_CODE_TOTAL_1;
+			parserData.message =   e.toString();
+
+			return new ResponseEntity<ApiStatusInfo>(parserData, HttpStatus.OK);
+
+		}
+
+
+		log.info("insertUserInquiry success " + uuid);
+
+		parserData.code =  "200.0000";
+		parserData.message =  "success";
+
+		return new ResponseEntity<ApiStatusInfo>(parserData, HttpStatus.OK);
+	}
+	
+
+	
+	@RequestMapping(value="/api/insertDentistReply.do", method = RequestMethod.POST)
+	public ResponseEntity<ApiStatusInfo> insertDentistReply(CommandMap commandMap, HttpServletRequest request, HttpServletResponse response) throws Exception{
+
+		String DENTIST_ID = request.getParameter("DENTIST_ID");
+
+		log.info("insertDentistReply  DENTIST_ID " + DENTIST_ID);
+
+		ApiStatusInfo parserData  = new ApiStatusInfo();
+		String uuid = null;
+
+		try {
+
+
+				SecureRandom rnd = new SecureRandom();
+				StringBuffer buf = new StringBuffer();
+
+				buf.append(DENTIST_ID).append("_");
+
+				for (int i = 0; i < 10; i++) {
+					if (rnd.nextBoolean()) {
+						buf.append((char) ((int) (rnd.nextInt(26)) + 97));
+					} else {
+						buf.append((rnd.nextInt(10)));
+					}
+				}
+
+				uuid = buf.toString();
+
+				commandMap.put("REPLY_ID", uuid);
+
+				sampleService.insertDentistReply(commandMap.getMap());
+
+
+		} 
+		catch (Exception e) {
+
+			e.printStackTrace();
+
+
+			parserData.code =  Constants.API_ERROR_CODE_TOTAL_1;
+			parserData.message =   e.toString();
+
+			return new ResponseEntity<ApiStatusInfo>(parserData, HttpStatus.OK);
+
+		}
+
+
+		log.info("insertDentistReply success " + uuid);
+
+		parserData.code =  "200.0000";
+		parserData.message =  "success";
+
+		return new ResponseEntity<ApiStatusInfo>(parserData, HttpStatus.OK);
+	}
+	
+	
+	@RequestMapping(value="/api/uploadImage.do", method = RequestMethod.POST, headers = "Content-Type!=multipart/form-data")
+	public ResponseEntity<FileUploadResponse> uploadImage(final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+		
+		
+		log.info("uploadImage start ");
+
+		FileUploadResponse fres  = new FileUploadResponse();
+
+		FileInfo fileInfo = null;
+
+		try {
+
+			fileInfo = uploadService.saveFile(request.getInputStream());
+
+		} catch (IOException e) {
+
+
+			fres.code =  Constants.API_ERROR_CODE_TOTAL_1;
+			fres.message =  e.toString();
+			return new ResponseEntity<FileUploadResponse>(
+					fres, HttpStatus.CREATED);
+		}
+
+
+		fres.code =  "200.0000";
+		fres.message =  "success";
+		fres.setLocation(fileInfo.getDownloadUrl());
+
+		return new ResponseEntity<FileUploadResponse>(
+				fres, HttpStatus.CREATED);
+	}
+	
 }
