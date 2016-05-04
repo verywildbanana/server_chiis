@@ -13,7 +13,7 @@ public class Constants {
 	public final static String API_ERROR_CODE_DENTAL_1_2 = "401.0002"; //존재하지 않은 유저 아이디
 	public final static String API_ERROR_CODE_DENTAL_2 = "401.0003"; // 치과 데이터 없음
 	public final static String API_ERROR_CODE_DENTAL_1_TXT = "이미 존재하는 아이디 입니다.";
-	public final static String API_ERROR_CODE_DENTAL_2_TXT = "등록된 치과 정보 없습니다.";
+	public final static String API_ERROR_CODE_DENTAL_2_TXT = "등록된 치과 정보가 없습니다.";
 	public final static String API_ERROR_CODE_DENTAL_1_2_TXT = "존재하지 않은 사용자 입니다.";
 	 
 	
